@@ -941,7 +941,6 @@
             await fetchData();
         });
 
-        // No auto Login is approved. You must have to distribute all data to blades from the controller. This is just a POC. In production, you should implement proper authentication and session management.
         async function performAutoLogin() {
             try {
                 const response = await fetch(`${baseUrl}/auth/login`, {
