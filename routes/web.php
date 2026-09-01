@@ -25,6 +25,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/staff', [\App\Http\Controllers\StaffController::class, 'index'])->name('admin.staff.index');
         Route::get('/staff/create', [\App\Http\Controllers\StaffController::class, 'create'])->name('admin.staff.create');
         Route::post('/staff', [\App\Http\Controllers\StaffController::class, 'store'])->name('admin.staff.store');
+        
+        Route::post('/leads/{lead}/assign', [LeadController::class, 'assign'])->name('leads.assign');
     });
 
     // Sales & Admin Routes
@@ -60,6 +62,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/clients/{client}/status', [ClientController::class, 'updateStatus'])->name('clients.update_status');
         Route::post('/documents/{document}/verify', [DocumentController::class, 'verify'])->name('documents.verify');
         Route::post('/documents/{document}/reject', [DocumentController::class, 'reject'])->name('documents.reject');
+        Route::put('/documents/{document}', [DocumentController::class, 'update'])->name('documents.update');
     });
     
     // Anyone can upload docs, issue certs, and log interactions (since sales/admin/verifier can interact with client page appropriately based on UI)

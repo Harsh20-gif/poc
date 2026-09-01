@@ -31,6 +31,17 @@ class DashboardController extends Controller
             ->withCount('assignedLeads')
             ->get();
 
-        return view('dashboard', compact('stats', 'highValueDeals', 'staffWorkload'));
+        $expiringCertifications = Certification::with('client')
+            ->whereIn('status', ['active', 'expiring_soon'])
+            ->where('expiry_date', '<=', now()->addDays(30))
+            ->orderBy('expiry_date', 'asc')
+            ->get();
+
+        $missingDocuments = ClientDocument::with(['client', 'certification'])
+            ->whereNull('file_path')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return view('dashboard', compact('stats', 'highValueDeals', 'staffWorkload', 'expiringCertifications', 'missingDocuments'));
     }
 }

@@ -51,17 +51,28 @@
                     <li class="mt-3 pt-3 border-top">
                         <small class="text-muted d-block mb-1">Assigned Staff</small>
                         <div class="d-flex align-items-center justify-content-between">
-                            @if($lead->assignee)
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-circle text-white rounded-circle d-flex align-items-center justify-content-center me-2 shadow-sm" style="background: linear-gradient(135deg, #0284c7, #38bdf8); width: 28px; height: 28px; font-size: 12px;">
-                                        {{ strtoupper(substr($lead->assignee->name, 0, 1)) }}
-                                    </div>
-                                    <span class="fw-medium text-dark">{{ $lead->assignee->name }}</span>
-                                </div>
+                            @if(auth()->user()->role === 'admin')
+                            <form action="{{ route('leads.assign', $lead) }}" method="POST" class="w-100">
+                                @csrf
+                                <select name="assigned_to" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    <option value="">-- Unassigned --</option>
+                                    @foreach($staff as $member)
+                                        <option value="{{ $member->id }}" {{ $lead->assigned_to == $member->id ? 'selected' : '' }}>{{ $member->name }}</option>
+                                    @endforeach
+                                </select>
+                            </form>
                             @else
-                                <span class="text-muted">Unassigned</span>
+                                @if($lead->assignee)
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle text-white rounded-circle d-flex align-items-center justify-content-center me-2 shadow-sm" style="background: linear-gradient(135deg, #0284c7, #38bdf8); width: 28px; height: 28px; font-size: 12px;">
+                                            {{ strtoupper(substr($lead->assignee->name, 0, 1)) }}
+                                        </div>
+                                        <span class="fw-medium text-dark">{{ $lead->assignee->name }}</span>
+                                    </div>
+                                @else
+                                    <span class="text-muted">Unassigned</span>
+                                @endif
                             @endif
-                            <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#reassignModal">Change</button>
                         </div>
                     </li>
                 </ul>
@@ -181,34 +192,5 @@
     </div>
 </div>
 
-<!-- Reassign Modal -->
-<div class="modal fade" id="reassignModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Reassign Lead</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <form action="{{ route('leads.update', $lead) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-body p-4">
-                    <div class="mb-3">
-                        <label class="form-label">Assign To</label>
-                        <select name="assigned_to" class="form-select">
-                            <option value="">-- Unassigned --</option>
-                            @foreach($staff as $member)
-                                <option value="{{ $member->id }}" {{ $lead->assigned_to == $member->id ? 'selected' : '' }}>{{ $member->name }} ({{ ucfirst($member->role) }})</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Assignment</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 @endsection

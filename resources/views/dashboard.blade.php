@@ -117,4 +117,56 @@
         </div>
     </div>
 </div>
+
+<!-- Reminders Row -->
+<div class="row g-4 mt-2">
+    <!-- Expiring Certificates -->
+    <div class="col-lg-6">
+        <div class="card h-100 border-0" style="background-color: var(--card-bg); border: 1px solid var(--card-border) !important;">
+            <div class="card-header border-0 pb-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-clock-history text-warning me-2"></i>Expiring Certificates</h5>
+            </div>
+            <div class="card-body px-4 pt-3 pb-4">
+                @forelse($expiringCertifications as $cert)
+                    <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded border shadow-sm bg-white">
+                        <div>
+                            <h6 class="mb-1 fw-bold text-dark">{{ $cert->certificate_type }} <span class="badge bg-warning text-dark ms-2">{{ \Carbon\Carbon::parse($cert->expiry_date)->diffForHumans() }}</span></h6>
+                            <a href="{{ route('clients.show', $cert->client) }}" class="text-decoration-none small text-muted">{{ $cert->client->company_name ?? $cert->client->client_name }}</a>
+                        </div>
+                        <a href="{{ route('clients.show', $cert->client) }}" class="btn btn-sm btn-outline-primary">Action</a>
+                    </div>
+                @empty
+                    <p class="text-muted text-center mb-0 py-3">No certificates expiring within 30 days.</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+    <!-- Missing Documents -->
+    <div class="col-lg-6">
+        <div class="card h-100 border-0" style="background-color: var(--card-bg); border: 1px solid var(--card-border) !important;">
+            <div class="card-header border-0 pb-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-file-earmark-x text-danger me-2"></i>Missing Required Documents</h5>
+            </div>
+            <div class="card-body px-4 pt-3 pb-4">
+                @forelse($missingDocuments as $doc)
+                    <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded border shadow-sm bg-white">
+                        <div>
+                            <h6 class="mb-1 fw-bold text-dark">{{ $doc->document_type }} <span class="badge bg-danger ms-2">Missing</span></h6>
+                            <div class="small text-muted">
+                                <a href="{{ route('clients.show', $doc->client) }}" class="text-decoration-none">{{ $doc->client->company_name ?? $doc->client->client_name }}</a>
+                                @if($doc->certification)
+                                    &bull; {{ $doc->certification->certificate_type }}
+                                @endif
+                            </div>
+                        </div>
+                        <a href="{{ route('clients.show', $doc->client) }}" class="btn btn-sm btn-outline-primary">Upload</a>
+                    </div>
+                @empty
+                    <p class="text-muted text-center mb-0 py-3">No missing documents!</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

@@ -41,6 +41,17 @@
                     @endforeach
                 </select>
             </div>
+            @if(auth()->user()->role === 'admin')
+            <div class="col-md-2">
+                <select name="assigned_to" class="form-select text-dark border-secondary rounded-pill">
+                    <option value="" class="text-dark">All Staff</option>
+                    <option value="unassigned" class="text-dark" {{ request('assigned_to') === 'unassigned' ? 'selected' : '' }}>Unassigned</option>
+                    @foreach($salesUsers as $member)
+                        <option value="{{ $member->id }}" class="text-dark" {{ request('assigned_to') == $member->id ? 'selected' : '' }}>{{ $member->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            @endif
             <div class="col-md-3 d-flex align-items-center">
                 <div class="form-check form-switch mt-1">
                     <input class="form-check-input bg-secondary border-secondary" type="checkbox" name="show_deactivated" value="1" id="show_deactivated" {{ request('show_deactivated') ? 'checked' : '' }}>

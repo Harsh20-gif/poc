@@ -42,33 +42,20 @@
 
         <div class="card">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                <h6 class="mb-0 fw-bold">Certifications</h6>
+                <h6 class="mb-0 fw-bold">Certifications & Document History</h6>
                 @if(in_array(Auth::user()->role, ['admin', 'sales', 'verifier']))
                     <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#issueCertModal">Issue Certificate</button>
                 @endif
             </div>
-            <div class="card-body p-0">
-                <table class="table mb-0 align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Type/Name</th>
-                            <th>Dates</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($client->certifications as $cert)
-                        <tr>
-                            <td>
-                                <div class="fw-bold">{{ $cert->certificate_type }}</div>
-                                <div class="text-muted small">{{ $cert->certificate_name }}</div>
-                            </td>
-                            <td>
-                                <div class="small">Iss: {{ $cert->issue_date->format('M d, Y') }}</div>
-                                <div class="small">Exp: {{ $cert->expiry_date->format('M d, Y') }}</div>
-                            </td>
-                            <td>
+            <div class="card-body bg-light bg-opacity-50">
+                @forelse($client->certifications as $cert)
+                    <div class="card mb-3 border shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">{{ $cert->certificate_type }}</h5>
+                                    <div class="text-muted small">{{ $cert->certificate_name }}</div>
+                                </div>
                                 @php
                                     $cBadge = match($cert->status) {
                                         'active' => 'bg-success',
@@ -78,19 +65,44 @@
                                         default => 'bg-light text-dark'
                                     };
                                 @endphp
-                                <span class="badge {{ $cBadge }}">{{ ucfirst(str_replace('_', ' ', $cert->status)) }}</span>
-                            </td>
-                            <td>
-                                @if($cert->certificate_pdf_path)
-                                    <a href="{{ Storage::url($cert->certificate_pdf_path) }}" target="_blank" class="btn btn-sm btn-light border" title="View PDF"><i class="bi bi-file-pdf text-danger"></i></a>
-                                @endif
-                            </td>
-                        </tr>
-                        @empty
-                        <tr><td colspan="4" class="text-center py-3 text-muted">No certificates issued yet.</td></tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                                <div class="text-end">
+                                    <span class="badge {{ $cBadge }} mb-2 d-block">{{ ucfirst(str_replace('_', ' ', $cert->status)) }}</span>
+                                    @if($cert->certificate_pdf_path)
+                                        <a href="{{ Storage::url($cert->certificate_pdf_path) }}" target="_blank" class="btn btn-sm btn-outline-danger"><i class="bi bi-file-pdf"></i> View PDF</a>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3 small">
+                                <div class="col-6"><strong>Issued:</strong> {{ $cert->issue_date->format('M d, Y') }}</div>
+                                <div class="col-6"><strong>Expires:</strong> {{ $cert->expiry_date->format('M d, Y') }}</div>
+                            </div>
+                            
+                            <h6 class="fw-bold small text-muted text-uppercase mb-2">Required Documents</h6>
+                            <ul class="list-group list-group-flush border rounded">
+                                @foreach($cert->documents as $doc)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                                        <div>
+                                            <span class="fw-medium small">{{ $doc->document_type }}</span>
+                                            @if($doc->file_path)
+                                                <br><a href="{{ Storage::url($doc->file_path) }}" target="_blank" class="small text-decoration-none"><i class="bi bi-download"></i> {{ $doc->original_filename }}</a>
+                                            @endif
+                                        </div>
+                                        <div>
+                                            @if($doc->file_path)
+                                                <span class="badge bg-{{ $doc->verification_status === 'verified' ? 'success' : ($doc->verification_status === 'rejected' ? 'danger' : 'warning text-dark') }}">{{ ucfirst($doc->verification_status) }}</span>
+                                            @else
+                                                <span class="badge bg-danger">Missing</span>
+                                                <button class="btn btn-sm btn-outline-primary ms-2 py-0 px-2" style="font-size: 11px;" onclick="openPlaceholderUploadModal({{ $doc->id }}, '{{ $doc->document_type }}')">Upload</button>
+                                            @endif
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-center py-3 text-muted">No certificates issued yet.</p>
+                @endforelse
             </div>
         </div>
     </div>
@@ -273,5 +285,45 @@
     </div>
 </div>
 @endif
+
+<!-- Placeholder Upload Modal -->
+<div class="modal fade" id="placeholderUploadModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Upload Required Document</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="placeholderUploadForm" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label">Document Type</label>
+                        <input type="text" id="placeholderDocType" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Upload File *</label>
+                        <input type="file" name="document_file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small class="text-muted">Max size: 5MB</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openPlaceholderUploadModal(docId, docType) {
+        document.getElementById('placeholderDocType').value = docType;
+        document.getElementById('placeholderUploadForm').action = "/documents/" + docId;
+        var modal = new bootstrap.Modal(document.getElementById('placeholderUploadModal'));
+        modal.show();
+    }
+</script>
 
 @endsection

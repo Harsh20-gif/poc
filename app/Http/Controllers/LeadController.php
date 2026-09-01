@@ -49,12 +49,21 @@ class LeadController extends Controller
             $query->where('is_active', true);
         }
 
+        if ($request->filled('assigned_to')) {
+            if ($request->assigned_to === 'unassigned') {
+                $query->whereNull('assigned_to');
+            } else {
+                $query->where('assigned_to', $request->assigned_to);
+            }
+        }
+
         $leads = $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
         
         $statuses = Lead::STATUSES;
         $sources = Lead::SOURCES;
+        $salesUsers = \App\Models\User::whereIn('role', ['admin', 'sales'])->get();
 
-        return view('leads.index', compact('leads', 'statuses', 'sources', 'stats'));
+        return view('leads.index', compact('leads', 'statuses', 'sources', 'stats', 'salesUsers'));
     }
 
     public function create()
@@ -191,6 +200,17 @@ class LeadController extends Controller
         $lead->update($validated);
 
         return redirect()->route('leads.show', $lead)->with('success', 'Lead updated.');
+    }
+
+    public function assign(Request $request, Lead $lead)
+    {
+        $request->validate([
+            'assigned_to' => 'nullable|exists:users,id',
+        ]);
+
+        $lead->update(['assigned_to' => $request->assigned_to]);
+
+        return redirect()->back()->with('success', 'Lead assign kar di gayi.');
     }
 
     public function deactivate(Request $request, Lead $lead)

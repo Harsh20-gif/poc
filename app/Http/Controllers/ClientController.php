@@ -35,7 +35,7 @@ class ClientController extends Controller
 
     public function show(Client $client)
     {
-        $client->load(['lead.interactions.user', 'documents.verifier', 'certifications']);
+        $client->load(['lead.interactions.user', 'documents.verifier', 'certifications.documents']);
         return view('clients.show', compact('client'));
     }
 

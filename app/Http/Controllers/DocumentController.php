@@ -30,6 +30,26 @@ class DocumentController extends Controller
         return redirect()->route('clients.show', $client)->with('success', 'Document uploaded.');
     }
 
+    public function update(Request $request, ClientDocument $document)
+    {
+        $request->validate([
+            'document_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ]);
+
+        $file = $request->file('document_file');
+        $path = $file->storeAs("client-documents/{$document->client_id}", $file->getClientOriginalName(), 'public');
+
+        $document->update([
+            'file_path' => $path,
+            'original_filename' => $file->getClientOriginalName(),
+            'verification_status' => 'pending',
+            'rejection_reason' => null,
+            'verified_by' => null,
+        ]);
+
+        return back()->with('success', 'Document uploaded successfully.');
+    }
+
     public function verify(ClientDocument $document)
     {
         $document->update([

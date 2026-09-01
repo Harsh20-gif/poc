@@ -42,7 +42,7 @@ class CertificationController extends Controller
             $path = $file->storeAs("client-certificates/{$client->id}", $file->getClientOriginalName(), 'public');
         }
 
-        Certification::create([
+        $certification = Certification::create([
             'client_id' => $client->id,
             'certificate_name' => $request->certificate_name,
             'certificate_type' => $request->certificate_type,
@@ -51,6 +51,16 @@ class CertificationController extends Controller
             'certificate_pdf_path' => $path,
             'status' => 'active',
         ]);
+
+        $requiredDocs = Certification::getRequiredDocumentTypes($request->certificate_type);
+        foreach ($requiredDocs as $docType) {
+            \App\Models\ClientDocument::create([
+                'client_id' => $client->id,
+                'certification_id' => $certification->id,
+                'document_type' => $docType,
+                'verification_status' => 'pending', // 'missing' since file_path is null
+            ]);
+        }
 
         return redirect()->route('clients.show', $client)->with('success', 'Certificate issued.');
     }

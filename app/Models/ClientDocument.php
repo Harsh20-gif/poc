@@ -11,6 +11,7 @@ class ClientDocument extends Model
 
     protected $fillable = [
         'client_id',
+        'certification_id',
         'document_type',
         'file_path',
         'original_filename',
@@ -27,5 +28,10 @@ class ClientDocument extends Model
     public function verifier()
     {
         return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    public function certification()
+    {
+        return $this->belongsTo(Certification::class);
     }
 }
