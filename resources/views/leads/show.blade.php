@@ -76,50 +76,11 @@
 
     <div class="col-lg-8">
         <!-- Interaction Timeline -->
-        <div class="card h-100">
-            <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                <h6 class="mb-0 fw-bold">Interaction Timeline</h6>
-            </div>
-            <div class="card-body">
-                @if($lead->is_active && $lead->status !== 'converted')
-                <form action="{{ route('interactions.store', $lead) }}" method="POST" class="mb-4 pb-4 border-bottom">
-                    @csrf
-                    <div class="mb-3">
-                        <label class="form-label fw-medium">Log New Interaction</label>
-                        <textarea name="remark" rows="3" class="form-control" placeholder="What happened in this interaction?" required></textarea>
-                    </div>
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <label class="form-label fw-medium small mb-1">Next Follow-up Date (Optional)</label>
-                            <input type="date" name="next_follow_up_date" class="form-control form-control-sm">
-                        </div>
-                        <div class="col-md-6 text-end mt-3 mt-md-0">
-                            <button type="submit" class="btn btn-primary">Add Note</button>
-                        </div>
-                    </div>
-                </form>
-                @endif
-
-                <div class="timeline">
-                    @forelse($lead->interactions as $interaction)
-                        <div class="timeline-item">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span class="fw-bold">{{ $interaction->user->name ?? 'System' }}</span>
-                                <small class="text-muted">{{ $interaction->created_at->format('M d, Y h:ia') }}</small>
-                            </div>
-                            <div class="bg-light p-3 rounded-3 text-dark mb-2 border">
-                                {{ $interaction->remark }}
-                            </div>
-                            @if($interaction->next_follow_up_date)
-                            <small class="text-primary fw-medium"><i class="bi bi-calendar-event me-1"></i> Follow-up scheduled for {{ $interaction->next_follow_up_date->format('M d, Y') }}</small>
-                            @endif
-                        </div>
-                    @empty
-                        <p class="text-muted text-center py-4">No interactions logged yet.</p>
-                    @endforelse
-                </div>
-            </div>
-        </div>
+        @include('partials.interaction-timeline', [
+            'interactions' => $lead->interactions,
+            'showForm' => $lead->is_active && $lead->status !== 'converted',
+            'submitUrl' => route('interactions.store', $lead)
+        ])
     </div>
 </div>
 

@@ -8,6 +8,24 @@ use Illuminate\Http\Request;
 
 class CertificationController extends Controller
 {
+    public function index(Request $request)
+    {
+        $stats = [
+            'total_leads' => \App\Models\Lead::where('is_active', true)->count(),
+            'pipeline_value' => Client::where('verification_status', '!=', 'completed')->sum('deal_amount'),
+            'total_clients' => Client::count(),
+            'active_certificates' => Certification::where('status', 'active')->count(),
+            'completed_projects' => Client::where('verification_status', 'completed')->count(),
+            'staff_members' => \App\Models\User::count(),
+        ];
+
+        $query = Certification::with('client.lead.assignee');
+        
+        $certifications = $query->orderBy('issue_date', 'desc')->paginate(15)->withQueryString();
+
+        return view('certifications.index', compact('certifications', 'stats'));
+    }
+
     public function store(Request $request, Client $client)
     {
         $request->validate([

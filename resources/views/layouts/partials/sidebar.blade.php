@@ -19,6 +19,9 @@
         <a href="{{ route('clients.index') }}" class="nav-link {{ request()->routeIs('clients.*') ? 'active' : '' }}">
             <i class="bi bi-building me-2"></i> Clients
         </a>
+        <a href="{{ route('certifications.index') }}" class="nav-link {{ request()->routeIs('certifications.*') ? 'active' : '' }}">
+            <i class="bi bi-award me-2"></i> Certificates
+        </a>
         @endif
 
         @if(in_array(Auth::user()->role, ['admin', 'sales']))

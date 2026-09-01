@@ -35,7 +35,7 @@ class ClientController extends Controller
 
     public function show(Client $client)
     {
-        $client->load(['lead', 'documents.verifier', 'certifications']);
+        $client->load(['lead.interactions.user', 'documents.verifier', 'certifications']);
         return view('clients.show', compact('client'));
     }
 
@@ -49,5 +49,21 @@ class ClientController extends Controller
         $client->update($validated);
 
         return redirect()->route('clients.show', $client)->with('success', 'Verification status updated.');
+    }
+
+    public function addInteraction(Request $request, Client $client)
+    {
+        $request->validate([
+            'remark' => 'required|string',
+            'next_follow_up_date' => 'nullable|date',
+        ]);
+
+        $client->lead->interactions()->create([
+            'user_id' => \Illuminate\Support\Facades\Auth::id(),
+            'remark' => $request->remark,
+            'next_follow_up_date' => $request->next_follow_up_date,
+        ]);
+
+        return redirect()->route('clients.show', $client)->with('success', 'Interaction logged successfully.');
     }
 }

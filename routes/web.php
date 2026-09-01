@@ -20,6 +20,13 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Admin Only Routes
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/staff', [\App\Http\Controllers\StaffController::class, 'index'])->name('staff.index');
+        Route::get('/staff/create', [\App\Http\Controllers\StaffController::class, 'create'])->name('staff.create');
+        Route::post('/staff', [\App\Http\Controllers\StaffController::class, 'store'])->name('staff.store');
+    });
+
     // Sales & Admin Routes
     Route::middleware('role:admin,sales')->group(function () {
         Route::get('/leads', [LeadController::class, 'index'])->name('leads.index');
@@ -43,6 +50,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
     Route::get('/clients/{client}', [ClientController::class, 'show'])->name('clients.show');
     
+    // Certificates Directory
+    Route::middleware('role:admin,sales,verifier')->group(function () {
+        Route::get('/certificates', [CertificationController::class, 'index'])->name('certifications.index');
+    });
+    
     // Verifier & Admin Routes
     Route::middleware('role:admin,verifier')->group(function () {
         Route::put('/clients/{client}/status', [ClientController::class, 'updateStatus'])->name('clients.update_status');
@@ -50,7 +62,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/documents/{document}/reject', [DocumentController::class, 'reject'])->name('documents.reject');
     });
     
-    // Anyone can upload docs, issue certs (since sales/admin/verifier can interact with client page appropriately based on UI)
+    // Anyone can upload docs, issue certs, and log interactions (since sales/admin/verifier can interact with client page appropriately based on UI)
     Route::post('/clients/{client}/documents', [DocumentController::class, 'store'])->name('documents.store');
     Route::post('/clients/{client}/certifications', [CertificationController::class, 'store'])->name('certifications.store');
+    Route::post('/clients/{client}/interactions', [ClientController::class, 'addInteraction'])->name('clients.interactions.store');
 });

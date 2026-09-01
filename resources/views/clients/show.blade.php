@@ -176,6 +176,15 @@
                 </div>
             </div>
         </div>
+
+        <!-- Client Interaction Timeline -->
+        <div class="mt-4">
+            @include('partials.interaction-timeline', [
+                'interactions' => $client->lead->interactions ?? collect(),
+                'showForm' => true,
+                'submitUrl' => route('clients.interactions.store', $client)
+            ])
+        </div>
     </div>
 </div>
 
