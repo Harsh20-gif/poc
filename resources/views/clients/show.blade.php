@@ -84,7 +84,7 @@
                                         <div>
                                             <span class="fw-medium small">{{ $doc->document_type }}</span>
                                             @if($doc->file_path)
-                                                <br><a href="{{ Storage::url($doc->file_path) }}" target="_blank" class="small text-decoration-none"><i class="bi bi-download"></i> {{ $doc->original_filename }}</a>
+                                                <br><a href="{{ Storage::url($doc->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary mt-1 py-0 px-2" style="font-size: 11px;"><i class="bi bi-eye"></i> View</a>
                                             @endif
                                         </div>
                                         <div>
@@ -140,7 +140,10 @@
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <div>
                                     <h6 class="mb-1 fw-bold">{{ $doc->document_type }}</h6>
-                                    <a href="{{ Storage::url($doc->file_path) }}" target="_blank" class="small text-decoration-none"><i class="bi bi-download me-1"></i> {{ $doc->original_filename }}</a>
+                                    <a href="{{ Storage::url($doc->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary mt-1 py-0 px-2" style="font-size: 12px;"><i class="bi bi-eye"></i> View</a>
+                                    @if($doc->original_filename)
+                                        <span class="small text-muted ms-2">{{ $doc->original_filename }}</span>
+                                    @endif
                                 </div>
                                 <span class="badge bg-{{ $doc->verification_status === 'verified' ? 'success' : ($doc->verification_status === 'rejected' ? 'danger' : 'warning text-dark') }}">{{ ucfirst($doc->verification_status) }}</span>
                             </div>
