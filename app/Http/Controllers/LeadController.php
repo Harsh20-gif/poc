@@ -12,7 +12,18 @@ class LeadController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Lead::query();
+        $stats = [
+            'total_leads' => Lead::where('is_active', true)->count(),
+            'pipeline_value' => Client::where('verification_status', '!=', 'completed')->sum('deal_amount'),
+            'total_clients' => Client::count(),
+            'active_certificates' => \App\Models\Certification::where('status', 'active')->count(),
+            'completed_projects' => Client::where('verification_status', 'completed')->count(),
+            'staff_members' => \App\Models\User::count(),
+        ];
+
+        $query = Lead::with(['assignee', 'interactions' => function($q) {
+            $q->latest();
+        }]);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -43,7 +54,7 @@ class LeadController extends Controller
         $statuses = Lead::STATUSES;
         $sources = Lead::SOURCES;
 
-        return view('leads.index', compact('leads', 'statuses', 'sources'));
+        return view('leads.index', compact('leads', 'statuses', 'sources', 'stats'));
     }
 
     public function create()

@@ -43,9 +43,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('staff', StaffController::class);
 
     // ─── LEADS ────────────────────────────────────────────────────────
-    Route::get('/leads/stats', [LeadController::class, 'stats']);   // must be before resource
-    Route::post('/leads/{lead}/certify', [LeadController::class, 'certify']);
-    Route::apiResource('leads', LeadController::class);
+    // API routes commented out to prevent route name conflicts with web routes (e.g. leads.show)
+    // Route::get('/leads/stats', [LeadController::class, 'stats']);
+    // Route::post('/leads/{lead}/certify', [LeadController::class, 'certify']);
+    // Route::apiResource('leads', LeadController::class);
 
     // ─── CERTIFICATES ──────────────────────────────────────────────────
     Route::get('/certificates', [CertificateController::class, 'index']);
