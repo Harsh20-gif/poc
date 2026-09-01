@@ -7,10 +7,30 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $clients = Client::with('lead')->orderBy('created_at', 'desc')->paginate(15);
-        return view('clients.index', compact('clients'));
+        $stats = [
+            'total_leads' => \App\Models\Lead::where('is_active', true)->count(),
+            'pipeline_value' => Client::where('verification_status', '!=', 'completed')->sum('deal_amount'),
+            'total_clients' => Client::count(),
+            'active_certificates' => \App\Models\Certification::where('status', 'active')->count(),
+            'completed_projects' => Client::where('verification_status', 'completed')->count(),
+            'staff_members' => \App\Models\User::count(),
+        ];
+
+        $query = Client::with('lead.assignee');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('company_name', 'like', "%{$search}%")
+                  ->orWhere('client_name', 'like', "%{$search}%");
+            });
+        }
+
+        $clients = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
+
+        return view('clients.index', compact('clients', 'stats'));
     }
 
     public function show(Client $client)
