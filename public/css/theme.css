@@ -1,14 +1,14 @@
 :root {
-    --primary: #6366F1;
-    --primary-hover: #4F46E5;
-    --primary-light: rgba(99, 102, 241, 0.1);
-    --dark: #0F172A;
-    --muted: #94A3B8;
-    --bg-page: #0B0F19;
-    --card-bg: #141924;
-    --card-border: rgba(255, 255, 255, 0.05);
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-    --text-main: #F8FAFC;
+    --primary: #0284c7; /* Sky 600 */
+    --primary-hover: #0369a1; /* Sky 700 */
+    --primary-light: #e0f2fe; /* Sky 100 */
+    --dark: #0f172a;
+    --muted: #64748b;
+    --bg-page: #f0f9ff; /* Sky 50 */
+    --card-bg: #ffffff;
+    --card-border: #e0f2fe; /* Sky 100 */
+    --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --text-main: #0f172a;
 }
 
 body {
@@ -42,8 +42,9 @@ body {
 }
 
 .sidebar {
-    background-color: var(--dark);
-    color: white;
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    border-right: 1px solid var(--card-border);
 }
 
 .sidebar-desktop {
@@ -70,7 +71,6 @@ body {
     padding: 1.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .nav-link {
     color: var(--muted);
     padding: 0.75rem 1rem;
@@ -82,12 +82,13 @@ body {
 
 .nav-link:hover, .nav-link.active {
     color: var(--primary);
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--primary-light);
 }
 
 .nav-link.active {
-    color: white;
-    background-color: rgba(255,255,255,0.05);
+    color: var(--primary);
+    background-color: var(--primary-light);
+    font-weight: 600;
 }
 
 .topbar {

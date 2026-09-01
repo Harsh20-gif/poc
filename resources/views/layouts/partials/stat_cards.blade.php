@@ -10,7 +10,7 @@
                         <i class="bi bi-funnel-fill"></i>
                     </div>
                 </div>
-                <h3 class="fw-bold mb-0 mt-2 text-white">{{ number_format($stats['total_leads'] ?? 0) }}</h3>
+                <h3 class="fw-bold mb-0 mt-2 text-dark">{{ number_format($stats['total_leads'] ?? 0) }}</h3>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
                         <i class="bi bi-currency-dollar"></i>
                     </div>
                 </div>
-                <h3 class="fw-bold mb-0 mt-2 text-white">${{ number_format(($stats['pipeline_value'] ?? 0) / 1000, 1) }}k</h3>
+                <h3 class="fw-bold mb-0 mt-2 text-dark">${{ number_format(($stats['pipeline_value'] ?? 0) / 1000, 1) }}k</h3>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
                         <i class="bi bi-building"></i>
                     </div>
                 </div>
-                <h3 class="fw-bold mb-0 mt-2 text-white">{{ number_format($stats['total_clients'] ?? 0) }}</h3>
+                <h3 class="fw-bold mb-0 mt-2 text-dark">{{ number_format($stats['total_clients'] ?? 0) }}</h3>
             </div>
         </div>
     </div>
@@ -55,7 +55,7 @@
                         <i class="bi bi-award-fill"></i>
                     </div>
                 </div>
-                <h3 class="fw-bold mb-0 mt-2 text-white">{{ number_format($stats['active_certificates'] ?? 0) }}</h3>
+                <h3 class="fw-bold mb-0 mt-2 text-dark">{{ number_format($stats['active_certificates'] ?? 0) }}</h3>
             </div>
         </div>
     </div>
@@ -70,7 +70,7 @@
                         <i class="bi bi-check-circle-fill"></i>
                     </div>
                 </div>
-                <h3 class="fw-bold mb-0 mt-2 text-white">{{ number_format($stats['completed_projects'] ?? 0) }}</h3>
+                <h3 class="fw-bold mb-0 mt-2 text-dark">{{ number_format($stats['completed_projects'] ?? 0) }}</h3>
             </div>
         </div>
     </div>
@@ -85,7 +85,7 @@
                         <i class="bi bi-people-fill"></i>
                     </div>
                 </div>
-                <h3 class="fw-bold mb-0 mt-2 text-white">{{ number_format($stats['staff_members'] ?? 0) }}</h3>
+                <h3 class="fw-bold mb-0 mt-2 text-dark">{{ number_format($stats['staff_members'] ?? 0) }}</h3>
             </div>
         </div>
     </div>

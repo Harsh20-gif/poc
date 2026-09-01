@@ -3,13 +3,13 @@
 @section('subtitle', 'Track and convert potential certification clients.')
 
 @section('topbar_actions')
-    <button class="btn btn-outline-secondary text-white border-secondary me-2" onclick="window.location.reload()">
+    <button class="btn btn-outline-secondary text-dark border-secondary me-2" onclick="window.location.reload()">
         <i class="bi bi-arrow-clockwise me-1"></i> Refresh Data
     </button>
-    <a href="{{ route('leads.create') }}" class="btn text-white border-0 shadow-sm me-2" style="background: linear-gradient(135deg, #6366F1, #8B5CF6);">
+    <a href="{{ route('leads.create') }}" class="btn text-white border-0 shadow-sm me-2" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">
         <i class="bi bi-plus-lg me-1"></i> New Lead
     </a>
-    <a href="{{ route('leads.import.form') }}" class="btn btn-outline-light"><i class="bi bi-upload"></i> Bulk Import</a>
+    <a href="{{ route('leads.import.form') }}" class="btn btn-outline-secondary text-dark border-secondary"><i class="bi bi-upload"></i> Bulk Import</a>
 @endsection
 
 @section('content')
@@ -18,15 +18,15 @@
 
 <div class="card mb-4 border-0" style="background-color: var(--card-bg); border: 1px solid var(--card-border) !important;">
     <div class="card-header border-0 pb-0 pt-4 px-4 d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 fw-bold text-white">All CRM Certification Leads</h5>
+        <h5 class="mb-0 fw-bold text-dark">All CRM Certification Leads</h5>
     </div>
     <div class="card-body px-4 pt-3 pb-4">
         <form method="GET" action="{{ route('leads.index') }}" class="row g-3 align-items-center mb-4">
             <div class="col-md-3">
-                <input type="text" name="search" class="form-control text-white border-secondary rounded-pill" style="background-color: rgba(255,255,255,0.05);" placeholder="Search Name, Email, Mobile..." value="{{ request('search') }}">
+                <input type="text" name="search" class="form-control text-dark border-secondary rounded-pill" placeholder="Search Name, Email, Mobile..." value="{{ request('search') }}">
             </div>
             <div class="col-md-2">
-                <select name="status" class="form-select text-white border-secondary rounded-pill" style="background-color: rgba(255,255,255,0.05);">
+                <select name="status" class="form-select text-dark border-secondary rounded-pill">
                     <option value="" class="text-dark">Active (Not Converted)</option>
                     @foreach($statuses as $key => $label)
                         <option value="{{ $key }}" class="text-dark" {{ request('status') === (string)$key ? 'selected' : '' }}>{{ $label }}</option>
@@ -34,7 +34,7 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <select name="source" class="form-select text-white border-secondary rounded-pill" style="background-color: rgba(255,255,255,0.05);">
+                <select name="source" class="form-select text-dark border-secondary rounded-pill">
                     <option value="" class="text-dark">All Sources</option>
                     @foreach($sources as $src)
                         <option value="{{ $src }}" class="text-dark" {{ request('source') == $src ? 'selected' : '' }}>{{ $src }}</option>
@@ -55,7 +55,7 @@
         </form>
         
         <div class="table-responsive">
-            <table class="table table-borderless table-hover align-middle mb-0 text-white">
+            <table class="table table-borderless table-hover align-middle mb-0 text-dark">
                 <thead style="border-bottom: 1px solid var(--card-border);">
                     <tr>
                         <th class="text-muted small text-uppercase pb-3">Company Name</th>
@@ -73,21 +73,21 @@
                 <tbody>
                     @forelse($leads as $lead)
                     <tr style="border-bottom: 1px solid var(--card-border);" class="{{ !$lead->is_active ? 'opacity-50' : '' }}">
-                        <td class="py-3 fw-medium text-white">{{ $lead->company_name ?? '—' }}</td>
-                        <td class="py-3 text-white">
+                        <td class="py-3 fw-medium text-dark">{{ $lead->company_name ?? '—' }}</td>
+                        <td class="py-3 text-dark">
                             <div>{{ $lead->contact_person }}</div>
                             <div class="text-muted small">{{ $lead->mobile }}</div>
                         </td>
                         <td class="py-3">
-                            <div class="fw-bold text-white">{{ $lead->mobile }}</div>
+                            <div class="fw-bold text-dark">{{ $lead->mobile }}</div>
                             <div class="text-muted small">{{ $lead->email ?? '—' }}</div>
                         </td>
-                        <td class="py-3 text-white">{{ $lead->city ?? '—' }}</td>
+                        <td class="py-3 text-dark">{{ $lead->city ?? '—' }}</td>
                         <td class="py-3">
                             @if(is_array($lead->services) && count($lead->services) > 0)
-                                <span class="badge bg-secondary bg-opacity-25 text-light fw-normal rounded-pill px-3">{{ $lead->services[0] }}</span>
+                                <span class="badge bg-secondary bg-opacity-10 text-dark fw-normal rounded-pill px-3">{{ $lead->services[0] }}</span>
                                 @if(count($lead->services) > 1)
-                                    <span class="badge bg-dark text-muted fw-normal rounded-pill ms-1">+{{ count($lead->services) - 1 }}</span>
+                                    <span class="badge bg-secondary bg-opacity-10 text-muted fw-normal rounded-pill ms-1">+{{ count($lead->services) - 1 }}</span>
                                 @endif
                             @else
                                 <span class="text-muted">—</span>
@@ -109,8 +109,8 @@
                                 {{ $statuses[$lead->status] ?? ucfirst(str_replace('_', ' ', $lead->status)) }}
                             </span>
                         </td>
-                        <td class="py-3 fw-bold text-white">—</td>
-                        <td class="py-3 text-white">
+                        <td class="py-3 fw-bold text-dark">—</td>
+                        <td class="py-3 text-dark">
                             @php
                                 $nextFollowUp = $lead->interactions->first()?->next_follow_up_date;
                             @endphp
@@ -123,17 +123,17 @@
                         <td class="py-3">
                             @if($lead->assignee)
                                 <div class="d-flex align-items-center">
-                                    <div class="avatar-circle bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px; font-size: 10px;">
+                                    <div class="avatar-circle text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="background: linear-gradient(135deg, #0284c7, #38bdf8); width: 24px; height: 24px; font-size: 10px;">
                                         {{ strtoupper(substr($lead->assignee->name, 0, 1)) }}
                                     </div>
-                                    <span class="text-white small">{{ $lead->assignee->name }}</span>
+                                    <span class="text-dark small">{{ $lead->assignee->name }}</span>
                                 </div>
                             @else
                                 <span class="text-muted small">—</span>
                             @endif
                         </td>
                         <td class="py-3 text-end">
-                            <a href="{{ route('leads.show', $lead) }}" class="btn btn-sm btn-outline-secondary text-white border-secondary me-1">View</a>
+                            <a href="{{ route('leads.show', $lead) }}" class="btn btn-sm btn-outline-secondary text-dark border-secondary me-1">View</a>
                             @if($lead->status === 'converted')
                                 <span class="badge bg-success bg-opacity-25 text-success rounded-pill px-3 py-2 border border-success border-opacity-25">Converted</span>
                             @else
@@ -161,36 +161,36 @@
 <!-- Certify Lead Modal -->
 <div class="modal fade" id="certifyModal" tabindex="-1" aria-labelledby="certifyModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content text-white" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
-            <div class="modal-header border-secondary border-opacity-50">
-                <h5 class="modal-title fw-bold" id="certifyModalLabel">Certify Lead</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+            <div class="modal-header border-secondary border-opacity-25">
+                <h5 class="modal-title fw-bold text-dark" id="certifyModalLabel">Certify Lead</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="certifyForm" method="POST" action="">
                 @csrf
                 <div class="modal-body">
-                    <p class="text-muted mb-4">You are converting <strong id="certifyLeadName" class="text-white"></strong> into a certified Client. Please provide the final deal details.</p>
+                    <p class="text-muted mb-4">You are converting <strong id="certifyLeadName" class="text-dark"></strong> into a certified Client. Please provide the final deal details.</p>
                     
                     <div class="mb-3">
-                        <label class="form-label text-white">Client/Entity Name <span class="text-danger">*</span></label>
-                        <input type="text" name="client_name" class="form-control text-white border-secondary" style="background-color: rgba(255,255,255,0.05);" required>
+                        <label class="form-label text-dark">Client/Entity Name <span class="text-danger">*</span></label>
+                        <input type="text" name="client_name" class="form-control text-dark border-secondary" required>
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label text-white">Deal Amount (Value) <span class="text-danger">*</span></label>
+                        <label class="form-label text-dark">Deal Amount (Value) <span class="text-danger">*</span></label>
                         <div class="input-group">
-                            <span class="input-group-text bg-secondary border-secondary text-white border-opacity-50">$</span>
-                            <input type="number" step="0.01" name="deal_amount" class="form-control text-white border-secondary" style="background-color: rgba(255,255,255,0.05);" required>
+                            <span class="input-group-text bg-secondary border-secondary text-dark border-opacity-25">$</span>
+                            <input type="number" step="0.01" name="deal_amount" class="form-control text-dark border-secondary" required>
                         </div>
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label text-white">Conversion Date <span class="text-danger">*</span></label>
-                        <input type="date" name="conversion_date" class="form-control text-white border-secondary" style="background-color: rgba(255,255,255,0.05);" value="{{ date('Y-m-d') }}" required>
+                        <label class="form-label text-dark">Conversion Date <span class="text-danger">*</span></label>
+                        <input type="date" name="conversion_date" class="form-control text-dark border-secondary" value="{{ date('Y-m-d') }}" required>
                     </div>
                 </div>
-                <div class="modal-footer border-secondary border-opacity-50">
-                    <button type="button" class="btn btn-outline-secondary text-white" data-bs-dismiss="modal">Cancel</button>
+                <div class="modal-footer border-secondary border-opacity-25">
+                    <button type="button" class="btn btn-outline-secondary text-dark" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn text-white" style="background-color: #10B981;">Certify Lead</button>
                 </div>
             </form>

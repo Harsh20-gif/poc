@@ -1,8 +1,8 @@
 <!-- Sidebar (Desktop) -->
 <aside class="sidebar sidebar-desktop d-none d-md-flex flex-column">
-    <div class="logo-area d-flex align-items-center">
-        <div class="badge fs-6 me-2 p-2 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #6366F1, #8B5CF6); color: white; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">C</div>
-        <h5 class="mb-0 fw-bold text-white">Proof of Content</h5>
+    <div class="logo-area d-flex align-items-center" style="border-bottom: 1px solid var(--card-border);">
+        <div class="badge fs-6 me-2 p-2 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #0284c7, #38bdf8); color: white; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">C</div>
+        <h5 class="mb-0 fw-bold text-dark">Proof of Content</h5>
     </div>
     <div class="flex-grow-1 px-3 py-3 d-flex flex-column">
         <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
@@ -27,7 +27,7 @@
         </a>
         @endif
         
-        <div class="mt-auto pb-2 border-top border-secondary border-opacity-25 pt-3">
+        <div class="mt-auto pb-2 border-top border-secondary border-opacity-10 pt-3">
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="nav-link text-muted logout-link border-0 bg-transparent w-100 text-start">
@@ -39,13 +39,13 @@
 </aside>
 
 <!-- Offcanvas Sidebar (Mobile) -->
-<div class="offcanvas offcanvas-start sidebar-mobile bg-dark" tabindex="-1" id="mobileSidebar" style="background-color: var(--dark) !important;">
-    <div class="offcanvas-header logo-area">
+<div class="offcanvas offcanvas-start sidebar-mobile" tabindex="-1" id="mobileSidebar" style="background-color: var(--card-bg) !important;">
+    <div class="offcanvas-header logo-area" style="border-bottom: 1px solid var(--card-border);">
         <div class="d-flex align-items-center">
-            <div class="badge fs-6 me-2 p-2 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #6366F1, #8B5CF6); color: white; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">C</div>
-            <h5 class="mb-0 fw-bold text-white">Proof of Content</h5>
+            <div class="badge fs-6 me-2 p-2 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #0284c7, #38bdf8); color: white; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">C</div>
+            <h5 class="mb-0 fw-bold text-dark">Proof of Content</h5>
         </div>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body d-flex flex-column p-0">
         <div class="flex-grow-1 px-3 py-3 d-flex flex-column">
@@ -71,7 +71,7 @@
             </a>
             @endif
             
-            <div class="mt-auto pb-2 border-top border-secondary border-opacity-25 pt-3">
+            <div class="mt-auto pb-2 border-top border-secondary border-opacity-10 pt-3">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="nav-link text-muted logout-link border-0 bg-transparent w-100 text-start">
