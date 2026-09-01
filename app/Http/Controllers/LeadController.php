@@ -59,7 +59,8 @@ class LeadController extends Controller
 
     public function create()
     {
-        return view('leads.create');
+        $staff = \App\Models\User::whereIn('role', ['admin', 'sales'])->get();
+        return view('leads.create', compact('staff'));
     }
 
     public function store(Request $request)
@@ -73,6 +74,7 @@ class LeadController extends Controller
             'city' => 'nullable|string|max:255',
             'source' => 'required|in:Website,LinkedIn,Instagram,Cold Call,Direct Visit,Other',
             'services' => 'nullable|array',
+            'assigned_to' => 'nullable|exists:users,id',
         ]);
 
         $validated['created_by'] = Auth::id();
@@ -167,7 +169,8 @@ class LeadController extends Controller
     public function show(Lead $lead)
     {
         $lead->load(['interactions.user', 'client', 'creator', 'assignee']);
-        return view('leads.show', compact('lead'));
+        $staff = \App\Models\User::whereIn('role', ['admin', 'sales'])->get();
+        return view('leads.show', compact('lead', 'staff'));
     }
 
     public function edit(Lead $lead)
@@ -181,7 +184,8 @@ class LeadController extends Controller
             'alternate_mobile' => 'nullable|string|max:20',
             'services' => 'nullable|array',
             'email' => 'nullable|email',
-            'city' => 'nullable|string'
+            'city' => 'nullable|string',
+            'assigned_to' => 'nullable|exists:users,id',
         ]);
 
         $lead->update($validated);

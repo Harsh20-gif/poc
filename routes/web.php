@@ -22,9 +22,9 @@ Route::middleware('auth')->group(function () {
 
     // Admin Only Routes
     Route::middleware('role:admin')->group(function () {
-        Route::get('/staff', [\App\Http\Controllers\StaffController::class, 'index'])->name('staff.index');
-        Route::get('/staff/create', [\App\Http\Controllers\StaffController::class, 'create'])->name('staff.create');
-        Route::post('/staff', [\App\Http\Controllers\StaffController::class, 'store'])->name('staff.store');
+        Route::get('/staff', [\App\Http\Controllers\StaffController::class, 'index'])->name('admin.staff.index');
+        Route::get('/staff/create', [\App\Http\Controllers\StaffController::class, 'create'])->name('admin.staff.create');
+        Route::post('/staff', [\App\Http\Controllers\StaffController::class, 'store'])->name('admin.staff.store');
     });
 
     // Sales & Admin Routes

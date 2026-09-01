@@ -51,6 +51,15 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">Assigned Staff</label>
+                            <select name="assigned_to" class="form-select @error('assigned_to') is-invalid @enderror">
+                                <option value="">-- Unassigned --</option>
+                                @foreach($staff as $member)
+                                    <option value="{{ $member->id }}" {{ old('assigned_to') == $member->id ? 'selected' : '' }}>{{ $member->name }} ({{ ucfirst($member->role) }})</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     
                     <h5 class="mb-3 fw-bold text-primary border-bottom pb-2">Interested Services</h5>

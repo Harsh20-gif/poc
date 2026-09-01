@@ -36,6 +36,6 @@ class StaffController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return redirect()->route('staff.index')->with('success', 'Staff member added successfully.');
+        return redirect()->route('admin.staff.index')->with('success', 'Staff member added successfully.');
     }
 }
