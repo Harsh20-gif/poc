@@ -10,46 +10,49 @@ class Lead extends Model
     use HasFactory;
 
     protected $fillable = [
-        'company_name',
         'contact_person',
+        'company_name',
+        'mobile',
+        'alternate_mobile',
         'email',
-        'phone',
         'city',
-        'state',
-        'service_type',
-        'status',
         'source',
-        'expected_value',
-        'notes',
-        'follow_up_date',
+        'services',
+        'status',
+        'is_active',
+        'deactivation_reason',
+        'renewed_from_certification_id',
+        'created_by',
         'assigned_to',
-        'is_client',
-        'client_since',
     ];
 
-    protected function casts(): array
+    protected $casts = [
+        'services' => 'array',
+        'is_active' => 'boolean',
+    ];
+
+    public function creator()
     {
-        return [
-            'follow_up_date' => 'date',
-            'expected_value' => 'decimal:2',
-            'is_client' => 'boolean',
-            'client_since' => 'datetime',
-        ];
+        return $this->belongsTo(User::class, 'created_by');
     }
 
-    /**
-     * Staff member assigned to this lead.
-     */
-    public function assignedStaff()
+    public function assignee()
     {
-        return $this->belongsTo(Staff::class, 'assigned_to');
+        return $this->belongsTo(User::class, 'assigned_to');
     }
 
-    /**
-     * Certificates issued for this lead.
-     */
-    public function certificates()
+    public function interactions()
     {
-        return $this->hasMany(Certificate::class);
+        return $this->hasMany(LeadInteraction::class)->orderBy('created_at', 'desc');
+    }
+
+    public function client()
+    {
+        return $this->hasOne(Client::class);
+    }
+
+    public function renewalCertification()
+    {
+        return $this->belongsTo(Certification::class, 'renewed_from_certification_id');
     }
 }

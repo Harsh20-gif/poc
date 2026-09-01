@@ -1,0 +1,173 @@
+:root {
+    --primary: #2563EB;
+    --primary-hover: #1E4FCC;
+    --primary-light: #EFF4FF;
+    --dark: #0F172A;
+    --muted: #64748B;
+    --bg-page: #F8FAFC;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+body {
+    background-color: var(--bg-page);
+    font-family: 'Inter', sans-serif;
+    color: var(--dark);
+}
+
+/* Auth Pages */
+.login-bg {
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.login-card {
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    max-width: 400px;
+}
+
+.text-dark-custom { color: var(--dark) !important; }
+
+/* Dashboard Layout */
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    background-color: var(--dark);
+    color: white;
+}
+
+.sidebar-desktop {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.main-content {
+    flex: 1;
+    margin-left: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 767.98px) {
+    .main-content { margin-left: 0; }
+}
+
+.logo-area {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-link {
+    color: var(--muted);
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    margin-bottom: 0.25rem;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link.active {
+    color: white;
+    background-color: var(--primary);
+}
+
+.topbar {
+    background: white;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Cards & Elements */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 1.25rem 1.5rem;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+/* Form controls */
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    border-color: #E2E8F0;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+}
+
+/* Custom Checkbox Highlights */
+.service-check-wrapper {
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    background: white;
+}
+.service-check-wrapper:hover {
+    border-color: var(--primary);
+}
+.service-check-wrapper.checked {
+    border-color: var(--primary);
+    background-color: var(--primary-light);
+}
+
+.timeline {
+    border-left: 2px solid #E2E8F0;
+    padding-left: 1.5rem;
+    position: relative;
+    margin-left: 1rem;
+}
+.timeline-item {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -1.85rem;
+    top: 0.25rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px var(--primary);
+}

@@ -6,24 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('leads', function (Blueprint $table) {
-            $table->boolean('is_client')->default(false)->after('assigned_to');
-            $table->timestamp('client_since')->nullable()->after('is_client');
+            $table->foreignId('renewed_from_certification_id')->nullable()->constrained('certifications')->nullOnDelete();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('leads', function (Blueprint $table) {
-            $table->dropColumn(['is_client', 'client_since']);
+            $table->dropForeign(['renewed_from_certification_id']);
+            $table->dropColumn('renewed_from_certification_id');
         });
     }
 };
