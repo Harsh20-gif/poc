@@ -4,8 +4,11 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <a href="{{ route('leads.create') }}" class="btn btn-primary me-2"><i class="bi bi-plus-lg"></i> Add New Lead</a>
-        <a href="{{ route('leads.import.form') }}" class="btn btn-outline-secondary"><i class="bi bi-upload"></i> Bulk Import CSV</a>
+        <h4 class="mb-0 fw-bold">Leads</h4>
+    </div>
+    <div>
+        <a href="{{ route('leads.create') }}" class="btn btn-primary me-2"><i class="bi bi-plus-lg"></i> New Lead</a>
+        <a href="{{ route('leads.import.form') }}" class="btn btn-outline-secondary"><i class="bi bi-upload"></i> Bulk Import</a>
     </div>
 </div>
 
@@ -19,18 +22,17 @@
             <div class="col-md-2">
                 <label class="form-label">Status</label>
                 <select name="status" class="form-select">
-                    <option value="">All Statuses</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="in_conversation" {{ request('status') == 'in_conversation' ? 'selected' : '' }}>In Conversation</option>
-                    <option value="converted" {{ request('status') == 'converted' ? 'selected' : '' }}>Converted</option>
-                    <option value="renewal" {{ request('status') == 'renewal' ? 'selected' : '' }}>Renewal</option>
+                    <option value="">Active (Not Converted)</option>
+                    @foreach($statuses as $key => $label)
+                        <option value="{{ $key }}" {{ request('status') === (string)$key ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="col-md-2">
                 <label class="form-label">Source</label>
                 <select name="source" class="form-select">
                     <option value="">All Sources</option>
-                    @foreach(['Website', 'LinkedIn', 'Instagram', 'Cold Call', 'Direct Visit', 'Other'] as $src)
+                    @foreach($sources as $src)
                         <option value="{{ $src }}" {{ request('source') == $src ? 'selected' : '' }}>{{ $src }}</option>
                     @endforeach
                 </select>
@@ -58,7 +60,6 @@
                     <th>Source</th>
                     <th>Services</th>
                     <th>Status</th>
-                    <th>Date</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -71,7 +72,7 @@
                     </td>
                     <td>
                         <div>{{ $lead->mobile }}</div>
-                        <div class="text-muted small">{{ $lead->email }}</div>
+                        @if($lead->email) <div class="text-muted small">{{ $lead->email }}</div> @endif
                     </td>
                     <td><span class="badge bg-secondary bg-opacity-25 text-dark">{{ $lead->source }}</span></td>
                     <td>
@@ -94,16 +95,15 @@
                                 default => 'bg-light text-dark'
                             };
                         @endphp
-                        <span class="badge {{ $badgeClass }}">{{ ucfirst(str_replace('_', ' ', $lead->status)) }}</span>
+                        <span class="badge {{ $badgeClass }}">{{ $statuses[$lead->status] ?? ucfirst($lead->status) }}</span>
                     </td>
-                    <td>{{ $lead->created_at->format('M d, Y') }}</td>
                     <td>
                         <a href="{{ route('leads.show', $lead) }}" class="btn btn-sm btn-outline-primary">View</a>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center py-4 text-muted">No leads found matching your criteria.</td>
+                    <td colspan="6" class="text-center py-4 text-muted">No leads found matching your criteria.</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -111,7 +111,7 @@
     </div>
 </div>
 
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center mt-3">
     {{ $leads->links('pagination::bootstrap-5') }}
 </div>
 @endsection

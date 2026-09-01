@@ -1,17 +1,20 @@
 :root {
-    --primary: #2563EB;
-    --primary-hover: #1E4FCC;
-    --primary-light: #EFF4FF;
+    --primary: #6366F1;
+    --primary-hover: #4F46E5;
+    --primary-light: rgba(99, 102, 241, 0.1);
     --dark: #0F172A;
-    --muted: #64748B;
-    --bg-page: #F8FAFC;
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --muted: #94A3B8;
+    --bg-page: #0B0F19;
+    --card-bg: #141924;
+    --card-border: rgba(255, 255, 255, 0.05);
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --text-main: #F8FAFC;
 }
 
 body {
     background-color: var(--bg-page);
     font-family: 'Inter', sans-serif;
-    color: var(--dark);
+    color: var(--text-main);
 }
 
 /* Auth Pages */
@@ -84,13 +87,13 @@ body {
 
 .nav-link.active {
     color: white;
-    background-color: var(--primary);
+    background-color: rgba(255,255,255,0.05);
 }
 
 .topbar {
-    background: white;
+    background: var(--bg-page);
     padding: 1rem 1.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid var(--card-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -98,15 +101,17 @@ body {
 
 /* Cards & Elements */
 .card {
-    border: none;
-    border-radius: 12px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
     box-shadow: var(--card-shadow);
     margin-bottom: 1.5rem;
+    color: var(--text-main);
 }
 
 .card-header {
     background: transparent;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid var(--card-border);
     padding: 1.25rem 1.5rem;
 }
 

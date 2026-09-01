@@ -9,6 +9,23 @@ class Lead extends Model
 {
     use HasFactory;
 
+    public const STATUSES = [
+        'pending' => 'Pending',
+        'in_conversation' => 'In Conversation',
+        'converted' => 'Converted',
+        'renewal' => 'Renewal',
+        'deactivated' => 'Deactivated',
+    ];
+
+    public const SOURCES = [
+        'Website',
+        'LinkedIn',
+        'Instagram',
+        'Cold Call',
+        'Direct Visit',
+        'Other'
+    ];
+
     protected $fillable = [
         'contact_person',
         'company_name',

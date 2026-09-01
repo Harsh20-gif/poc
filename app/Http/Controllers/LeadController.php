@@ -26,6 +26,8 @@ class LeadController extends Controller
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
+        } else {
+            $query->where('status', '!=', 'converted');
         }
 
         if ($request->filled('source')) {
@@ -36,9 +38,12 @@ class LeadController extends Controller
             $query->where('is_active', true);
         }
 
-        $leads = $query->orderBy('created_at', 'desc')->paginate(15);
+        $leads = $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
         
-        return view('leads.index', compact('leads'));
+        $statuses = Lead::STATUSES;
+        $sources = Lead::SOURCES;
+
+        return view('leads.index', compact('leads', 'statuses', 'sources'));
     }
 
     public function create()

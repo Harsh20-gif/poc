@@ -13,22 +13,24 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-        $stats = [];
+        $stats = [
+            'total_leads' => Lead::where('is_active', true)->count(),
+            'pipeline_value' => Client::where('verification_status', '!=', 'completed')->sum('deal_amount'),
+            'total_clients' => Client::count(),
+            'active_certificates' => Certification::where('status', 'active')->count(),
+            'completed_projects' => Client::where('verification_status', 'completed')->count(),
+            'staff_members' => \App\Models\User::count(),
+        ];
 
-        if (in_array($user->role, ['admin', 'sales'])) {
-            $stats['pending_leads'] = Lead::where('status', 'pending')->where('is_active', true)->count();
-            $stats['in_conversation_leads'] = Lead::where('status', 'in_conversation')->where('is_active', true)->count();
-            $stats['renewal_leads'] = Lead::where('status', 'renewal')->where('is_active', true)->count();
-            $stats['total_clients'] = Client::count();
-            $stats['certs_expiring_soon'] = Certification::where('status', 'expiring_soon')->count();
-        }
+        $highValueDeals = Client::with('lead.assignee')
+            ->orderBy('deal_amount', 'desc')
+            ->take(5)
+            ->get();
 
-        if (in_array($user->role, ['admin', 'verifier'])) {
-            $stats['total_clients'] = Client::count();
-            $stats['pending_documents'] = ClientDocument::where('verification_status', 'pending')->count();
-        }
+        $staffWorkload = \App\Models\User::whereIn('role', ['sales', 'admin'])
+            ->withCount('assignedLeads')
+            ->get();
 
-        return view('dashboard', compact('stats'));
+        return view('dashboard', compact('stats', 'highValueDeals', 'staffWorkload'));
     }
 }
