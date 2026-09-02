@@ -88,7 +88,15 @@ class LeadController extends Controller
 
         $validated['created_by'] = Auth::id();
 
-        Lead::create($validated);
+        $lead = Lead::create($validated);
+
+        \App\Models\LeadInteraction::create([
+            'lead_id' => $lead->id,
+            'user_id' => Auth::id(),
+            'type' => 'created',
+            'remark' => 'Lead created manually.',
+            'details' => ['source' => $lead->source]
+        ]);
 
         return redirect()->route('leads.index')->with('success', 'Lead created successfully.');
     }
@@ -175,11 +183,23 @@ class LeadController extends Controller
         return redirect()->route('leads.index')->with('success', "Import complete. $imported imported, $skipped skipped.");
     }
 
-    public function show(Lead $lead)
+    public function show(Request $request, Lead $lead)
     {
-        $lead->load(['interactions.user', 'client', 'creator', 'assignee']);
+        $interactionsQuery = $lead->interactions()->with('user');
+        
+        if ($request->filled('timeline_type')) {
+            $interactionsQuery->where('type', $request->timeline_type);
+        }
+        
+        if ($request->filled('timeline_search')) {
+            $interactionsQuery->where('remark', 'like', '%' . $request->timeline_search . '%');
+        }
+        
+        $interactions = $interactionsQuery->latest()->get();
+
+        $lead->load(['client', 'creator', 'assignee']);
         $staff = \App\Models\User::whereIn('role', ['admin', 'sales'])->get();
-        return view('leads.show', compact('lead', 'staff'));
+        return view('leads.show', compact('lead', 'staff', 'interactions'));
     }
 
     public function edit(Lead $lead)
@@ -210,6 +230,15 @@ class LeadController extends Controller
 
         $lead->update(['assigned_to' => $request->assigned_to]);
 
+        $assignedUser = $request->assigned_to ? \App\Models\User::find($request->assigned_to) : null;
+        \App\Models\LeadInteraction::create([
+            'lead_id' => $lead->id,
+            'user_id' => Auth::id(),
+            'type' => 'assignment',
+            'remark' => $assignedUser ? 'Assigned to ' . $assignedUser->name : 'Unassigned',
+            'details' => ['assigned_to' => $request->assigned_to]
+        ]);
+
         return redirect()->back()->with('success', 'Lead assign kar di gayi.');
     }
 
@@ -225,6 +254,14 @@ class LeadController extends Controller
             'deactivation_reason' => $request->deactivation_reason,
         ]);
 
+        \App\Models\LeadInteraction::create([
+            'lead_id' => $lead->id,
+            'user_id' => Auth::id(),
+            'type' => 'status_change',
+            'remark' => 'Lead deactivated: ' . $request->deactivation_reason,
+            'details' => ['status' => 'deactivated', 'reason' => $request->deactivation_reason]
+        ]);
+
         return redirect()->route('leads.show', $lead)->with('success', 'Lead deactivated.');
     }
 
@@ -234,6 +271,14 @@ class LeadController extends Controller
             'is_active' => true,
             'status' => 'pending', // Revert to pending or previous state? Pending is safe.
             'deactivation_reason' => null,
+        ]);
+
+        \App\Models\LeadInteraction::create([
+            'lead_id' => $lead->id,
+            'user_id' => Auth::id(),
+            'type' => 'status_change',
+            'remark' => 'Lead reactivated.',
+            'details' => ['status' => 'pending']
         ]);
 
         return redirect()->route('leads.show', $lead)->with('success', 'Lead reactivated.');
@@ -261,6 +306,15 @@ class LeadController extends Controller
             ]);
 
             $lead->update(['status' => 'converted']);
+            
+            \App\Models\LeadInteraction::create([
+                'lead_id' => $lead->id,
+                'user_id' => Auth::id(),
+                'type' => 'status_change',
+                'remark' => 'Lead converted to Client.',
+                'details' => ['status' => 'converted', 'client_id' => $client->id]
+            ]);
+            
             DB::commit();
 
             return redirect()->route('clients.show', $client)->with('success', 'Lead successfully converted to Client!');

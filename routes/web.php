@@ -43,9 +43,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/leads/{lead}/reactivate', [LeadController::class, 'reactivate'])->name('leads.reactivate');
         Route::post('/leads/{lead}/convert', [LeadController::class, 'convert'])->name('leads.convert');
         
+        Route::post('/clients', [ClientController::class, 'store'])->name('clients.store');
         Route::post('/leads/{lead}/interactions', [LeadInteractionController::class, 'store'])->name('interactions.store');
         
         Route::get('/renewals', [CertificationController::class, 'renewals'])->name('renewals.index');
+        
+        Route::get('/history', [\App\Http\Controllers\HistoryController::class, 'index'])->name('history');
     });
 
     // All Authenticated users can view clients

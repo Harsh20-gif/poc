@@ -13,6 +13,9 @@
         <a href="{{ route('leads.index') }}" class="nav-link {{ request()->routeIs('leads.*') ? 'active' : '' }}">
             <i class="bi bi-funnel me-2"></i> Leads
         </a>
+        <a href="{{ route('history') }}" class="nav-link {{ request()->routeIs('history') ? 'active' : '' }}">
+            <i class="bi bi-clock-history me-2"></i> History
+        </a>
         @endif
 
         @if(in_array(Auth::user()->role, ['admin', 'sales', 'verifier']))
@@ -59,6 +62,9 @@
             @if(in_array(Auth::user()->role, ['admin', 'sales']))
             <a href="{{ route('leads.index') }}" class="nav-link {{ request()->routeIs('leads.*') ? 'active' : '' }}">
                 <i class="bi bi-funnel me-2"></i> Leads
+            </a>
+            <a href="{{ route('history') }}" class="nav-link {{ request()->routeIs('history') ? 'active' : '' }}">
+                <i class="bi bi-clock-history me-2"></i> History
             </a>
             @endif
 

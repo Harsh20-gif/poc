@@ -11,10 +11,61 @@
     --text-main: #0f172a;
 }
 
+html {
+    font-size: 12px;
+}
+
 body {
     background-color: var(--bg-page);
     font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
     color: var(--text-main);
+}
+
+.container-fluid {
+    padding: 1rem !important;
+}
+
+.row {
+    --bs-gutter-x: 0.75rem;
+    --bs-gutter-y: 0.75rem;
+}
+
+.card {
+    margin-bottom: 1rem;
+}
+
+.card-body {
+    padding: 1rem !important;
+}
+
+.card-header {
+    padding: 0.875rem 1rem !important;
+}
+
+.sidebar-desktop {
+    width: 220px;
+}
+
+.main-content {
+    margin-left: 220px;
+}
+
+.logo-area {
+    padding: 1rem 1.25rem;
+}
+
+.nav-link {
+    padding: 0.55rem 0.75rem;
+}
+
+.topbar {
+    padding: 0.75rem 1rem;
+}
+
+.form-control, .form-select {
+    padding: 0.5rem 0.75rem;
 }
 
 /* Auth Pages */

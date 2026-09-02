@@ -19,6 +19,7 @@ class LeadInteractionController extends Controller
         LeadInteraction::create([
             'lead_id' => $lead->id,
             'user_id' => Auth::id(),
+            'type' => 'remark',
             'remark' => $request->remark,
             'next_follow_up_date' => $request->next_follow_up_date,
         ]);

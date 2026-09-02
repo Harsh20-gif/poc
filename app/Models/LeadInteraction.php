@@ -12,12 +12,15 @@ class LeadInteraction extends Model
     protected $fillable = [
         'lead_id',
         'user_id',
+        'type',
         'remark',
+        'details',
         'next_follow_up_date',
     ];
 
     protected $casts = [
         'next_follow_up_date' => 'date',
+        'details' => 'array',
     ];
 
     public function lead()

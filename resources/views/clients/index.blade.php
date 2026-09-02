@@ -9,10 +9,20 @@
     <a href="{{ route('leads.create') }}" class="btn text-white border-0 shadow-sm me-2" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">
         <i class="bi bi-plus-lg me-1"></i> New Lead
     </a>
+    <button type="button" class="btn text-white border-0 shadow-sm me-2" data-bs-toggle="modal" data-bs-target="#newClientModal" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">
+        <i class="bi bi-person-plus-fill me-1"></i> New Client
+    </button>
     <a href="{{ route('admin.staff.create') }}" class="btn btn-outline-secondary text-dark border-secondary"><i class="bi bi-person-plus"></i> Add Staff</a>
 @endsection
 
 @section('content')
+
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
 
 @include('layouts.partials.stat_cards')
 
@@ -53,7 +63,7 @@
                             <div class="fw-bold text-dark">{{ $client->lead?->mobile ?? '—' }}</div>
                             <div class="text-muted small">{{ $client->lead?->email ?? '—' }}</div>
                         </td>
-                        <td class="py-3 text-dark">{{ $client->lead?->city ?? '—' }}</td>
+                        <td class="py-3 text-dark">{{ $client->city ?? $client->lead?->city ?? '—' }}</td>
                         <td class="py-3">
                             @php
                                 $services = is_string($client->finalized_services) ? json_decode($client->finalized_services, true) : $client->finalized_services;
@@ -104,4 +114,160 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="newClientModal" tabindex="-1" aria-labelledby="newClientModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0 pb-2">
+                <div>
+                    <h5 class="modal-title fw-bold text-dark" id="newClientModalLabel">New Client</h5>
+                    <p class="mb-0 text-muted small">Add a client directly without converting a lead.</p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('clients.store') }}" method="POST" id="newClientForm">
+                @csrf
+                <div class="modal-body px-4 pb-4">
+                    @if($errors->any())
+                        <div class="alert alert-danger py-2 mb-3" role="alert">
+                            <strong>Please fix the following:</strong>
+                            <ul class="mb-0 ps-3 mt-2">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="company_name" class="form-label fw-medium text-dark">Company Name <span class="text-danger">*</span></label>
+                            <input type="text" id="company_name" name="company_name" class="form-control @error('company_name') is-invalid @enderror" value="{{ old('company_name') }}" required>
+                            @error('company_name')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label for="owner" class="form-label fw-medium text-dark">Owner <span class="text-danger">*</span></label>
+                            <input type="text" id="owner" name="owner" class="form-control @error('owner') is-invalid @enderror" value="{{ old('owner') }}" required>
+                            @error('owner')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-12">
+                            <label for="address" class="form-label fw-medium text-dark">Address</label>
+                            <textarea id="address" name="address" rows="2" class="form-control @error('address') is-invalid @enderror">{{ old('address') }}</textarea>
+                            @error('address')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label for="city" class="form-label fw-medium text-dark">City</label>
+                            <input type="text" id="city" name="city" class="form-control @error('city') is-invalid @enderror" value="{{ old('city') }}">
+                            @error('city')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label for="state" class="form-label fw-medium text-dark">State</label>
+                            <input type="text" id="state" name="state" class="form-control @error('state') is-invalid @enderror" value="{{ old('state') }}">
+                            @error('state')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label for="zip" class="form-label fw-medium text-dark">Zip</label>
+                            <input type="text" id="zip" name="zip" class="form-control @error('zip') is-invalid @enderror" value="{{ old('zip') }}">
+                            @error('zip')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label for="country" class="form-label fw-medium text-dark">Country</label>
+                            <input type="text" id="country" name="country" class="form-control @error('country') is-invalid @enderror" value="{{ old('country') }}">
+                            @error('country')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label for="phone" class="form-label fw-medium text-dark">Phone <span class="text-danger">*</span></label>
+                            <input type="text" id="phone" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" required>
+                            @error('phone')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label for="website" class="form-label fw-medium text-dark">Website</label>
+                            <input type="url" id="website" name="website" class="form-control @error('website') is-invalid @enderror" value="{{ old('website') }}">
+                            @error('website')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label for="vat_number" class="form-label fw-medium text-dark">VAT Number</label>
+                            <input type="text" id="vat_number" name="vat_number" class="form-control @error('vat_number') is-invalid @enderror" value="{{ old('vat_number') }}">
+                            @error('vat_number')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label for="client_group" class="form-label fw-medium text-dark">Client Group</label>
+                            <select id="client_group" name="client_group" class="form-select @error('client_group') is-invalid @enderror">
+                                <option value="">Select group</option>
+                                <option value="Retail" {{ old('client_group') === 'Retail' ? 'selected' : '' }}>Retail</option>
+                                <option value="Corporate" {{ old('client_group') === 'Corporate' ? 'selected' : '' }}>Corporate</option>
+                                <option value="Government" {{ old('client_group') === 'Government' ? 'selected' : '' }}>Government</option>
+                            </select>
+                            @error('client_group')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label for="currency" class="form-label fw-medium text-dark">Currency</label>
+                            <select id="currency" name="currency" class="form-select @error('currency') is-invalid @enderror">
+                                <option value="INR" {{ old('currency', 'INR') === 'INR' ? 'selected' : '' }}>INR</option>
+                                <option value="USD" {{ old('currency') === 'USD' ? 'selected' : '' }}>USD</option>
+                                <option value="EUR" {{ old('currency') === 'EUR' ? 'selected' : '' }}>EUR</option>
+                                <option value="GBP" {{ old('currency') === 'GBP' ? 'selected' : '' }}>GBP</option>
+                            </select>
+                            @error('currency')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label for="currency_symbol" class="form-label fw-medium text-dark">Currency Symbol</label>
+                            <input type="text" id="currency_symbol" name="currency_symbol" class="form-control @error('currency_symbol') is-invalid @enderror" value="{{ old('currency_symbol', '₹') }}">
+                            @error('currency_symbol')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0 px-4 pb-4">
+                    <button type="button" class="btn btn-outline-secondary text-dark border-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary px-4" id="newClientSubmitBtn">
+                        <span class="btn-text">Save Client</span>
+                        <span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modalElement = document.getElementById('newClientModal');
+        const currencySelect = document.getElementById('currency');
+        const currencySymbolInput = document.getElementById('currency_symbol');
+        const clientForm = document.getElementById('newClientForm');
+        const submitBtn = document.getElementById('newClientSubmitBtn');
+
+        const currencyMap = {
+            INR: '₹',
+            USD: '$',
+            EUR: '€',
+            GBP: '£'
+        };
+
+        function syncCurrencySymbol() {
+            const selectedCurrency = currencySelect.value;
+            currencySymbolInput.value = currencyMap[selectedCurrency] || currencySymbolInput.value || '₹';
+        }
+
+        if (currencySelect && currencySymbolInput) {
+            currencySelect.addEventListener('change', syncCurrencySymbol);
+            syncCurrencySymbol();
+        }
+
+        if (modalElement && {{ $errors->any() || session('client_modal') ? 'true' : 'false' }}) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+
+        if (clientForm && submitBtn) {
+            clientForm.addEventListener('submit', function () {
+                submitBtn.disabled = true;
+                const textNode = submitBtn.querySelector('.btn-text');
+                const spinner = submitBtn.querySelector('.spinner-border');
+                if (textNode) textNode.textContent = 'Saving...';
+                if (spinner) spinner.classList.remove('d-none');
+            });
+        }
+    });
+</script>
 @endsection
