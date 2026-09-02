@@ -23,7 +23,7 @@
         @endif
 
         <!-- Timeline Filter -->
-        <form method="GET" action="{{ route('leads.show', $lead) }}" class="mb-4 bg-light p-3 rounded border">
+        <form method="GET" action="{{ $filterUrl ?? url()->current() }}" class="mb-4 bg-light p-3 rounded border">
             <div class="row g-2 align-items-center">
                 <div class="col-md-5">
                     <input type="text" name="timeline_search" class="form-control form-control-sm" placeholder="Search timeline..." value="{{ request('timeline_search') }}">
