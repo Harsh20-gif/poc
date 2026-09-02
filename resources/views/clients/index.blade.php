@@ -240,12 +240,12 @@
                         </div>
                         <div class="col-md-6">
                             <label for="client_group" class="form-label fw-medium text-dark">Client Group</label>
-                            <select id="client_group" name="client_group" class="form-select @error('client_group') is-invalid @enderror">
-                                <option value="">Select group</option>
-                                <option value="Retail" {{ old('client_group') === 'Retail' ? 'selected' : '' }}>Retail</option>
-                                <option value="Corporate" {{ old('client_group') === 'Corporate' ? 'selected' : '' }}>Corporate</option>
-                                <option value="Government" {{ old('client_group') === 'Government' ? 'selected' : '' }}>Government</option>
-                            </select>
+                            <input list="client_groups_list" id="client_group" name="client_group" class="form-control @error('client_group') is-invalid @enderror" value="{{ old('client_group') }}" placeholder="Type or select group">
+                            <datalist id="client_groups_list">
+                                @foreach($clientGroups as $group)
+                                    <option value="{{ $group }}">
+                                @endforeach
+                            </datalist>
                             @error('client_group')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">

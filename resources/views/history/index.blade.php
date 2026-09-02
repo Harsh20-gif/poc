@@ -20,9 +20,6 @@
                             <select name="type" class="form-select form-select-sm">
                                 <option value="">All Types</option>
                                 <option value="remark" {{ request('type') === 'remark' ? 'selected' : '' }}>Remarks</option>
-                                <option value="status_change" {{ request('type') === 'status_change' ? 'selected' : '' }}>Status Changes</option>
-                                <option value="assignment" {{ request('type') === 'assignment' ? 'selected' : '' }}>Assignments</option>
-                                <option value="created" {{ request('type') === 'created' ? 'selected' : '' }}>Creation</option>
                             </select>
                         </div>
                         <div class="col-md-3">

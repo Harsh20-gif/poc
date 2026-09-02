@@ -150,12 +150,12 @@
                 <div class="modal-body p-4">
                     <div class="mb-3">
                         <label class="form-label">Certificate Type *</label>
-                        <select name="certificate_type" class="form-select" required>
-                            <option value="">Select Type</option>
-                            @foreach(['ISO 9001', 'ISO 14001', 'ISO 45001', 'ISO 27001', 'CE Marking', 'BIS Certification', 'FSSAI', 'GMP', 'Hallmark'] as $type)
-                                <option value="{{ $type }}">{{ $type }}</option>
+                        <input list="certificate_types_list" name="certificate_type" class="form-control" placeholder="Select or type type" required>
+                        <datalist id="certificate_types_list">
+                            @foreach($certificateTypes as $type)
+                                <option value="{{ $type }}">
                             @endforeach
-                        </select>
+                        </datalist>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Specific Name / Standard *</label>

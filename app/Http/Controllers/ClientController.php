@@ -227,7 +227,8 @@ class ClientController extends Controller
     public function show(Client $client)
     {
         $client->load(['lead.interactions.user', 'documents.verifier', 'certifications.documents']);
-        return view('clients.show', compact('client'));
+        $certificateTypes = \App\Models\Certification::whereNotNull('certificate_type')->distinct()->pluck('certificate_type');
+        return view('clients.show', compact('client', 'certificateTypes'));
     }
 
     public function updateStatus(Request $request, Client $client)

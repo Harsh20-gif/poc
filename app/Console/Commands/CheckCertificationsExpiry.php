@@ -29,7 +29,7 @@ class CheckCertificationsExpiry extends Command
      */
     public function handle()
     {
-        $days = $this->option('days');
+        $days = (int) $this->option('days');
         $dateThreshold = Carbon::now()->addDays($days);
         $today = Carbon::now();
 

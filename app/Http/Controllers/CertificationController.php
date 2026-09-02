@@ -68,7 +68,8 @@ class CertificationController extends Controller
     public function renewals()
     {
         $certifications = Certification::with('client')
-            ->whereIn('status', ['expiring_soon', 'expired'])
+            ->whereNotNull('expiry_date')
+            ->where('expiry_date', '<=', now()->addDays(30))
             ->orderBy('expiry_date', 'asc')
             ->paginate(15);
             

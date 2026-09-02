@@ -45,11 +45,12 @@
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
                             <label class="form-label fw-medium">Source *</label>
-                            <select name="source" class="form-select @error('source') is-invalid @enderror" required>
-                                @foreach(['Website', 'LinkedIn', 'Instagram', 'Cold Call', 'Direct Visit', 'Other'] as $src)
-                                    <option value="{{ $src }}" {{ old('source') == $src ? 'selected' : '' }}>{{ $src }}</option>
+                            <input list="sources_list" name="source" class="form-control @error('source') is-invalid @enderror" value="{{ old('source') }}" placeholder="Select or type source" required>
+                            <datalist id="sources_list">
+                                @foreach($sources as $src)
+                                    <option value="{{ $src }}">
                                 @endforeach
-                            </select>
+                            </datalist>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-medium">Assigned Staff</label>
@@ -64,7 +65,7 @@
                     
                     <h5 class="mb-3 fw-bold text-primary border-bottom pb-2">Interested Services</h5>
                     <div class="row g-3 mb-4">
-                        @foreach(['ISO 9001', 'ISO 14001', 'ISO 45001', 'ISO 27001', 'CE Marking', 'BIS Certification', 'FSSAI', 'GMP', 'Hallmark', 'GST Registration'] as $service)
+                        @foreach($allServices as $service)
                             <div class="col-md-4 col-sm-6">
                                 <label class="service-check-wrapper d-flex align-items-center w-100">
                                     <input type="checkbox" name="services[]" value="{{ $service }}" class="form-check-input service-checkbox me-2" {{ (is_array(old('services')) && in_array($service, old('services'))) ? 'checked' : '' }}>
@@ -72,6 +73,11 @@
                                 </label>
                             </div>
                         @endforeach
+                        
+                        <div class="col-12 mt-3">
+                            <label class="form-label fw-medium text-muted small mb-1">Add Custom Service (comma separated)</label>
+                            <input type="text" name="custom_services" class="form-control form-control-sm border-secondary" placeholder="e.g. ISO 22000, Custom Audit">
+                        </div>
                     </div>
 
                     <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">

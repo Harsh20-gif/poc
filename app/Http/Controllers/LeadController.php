@@ -60,7 +60,7 @@ class LeadController extends Controller
         $leads = $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
         
         $statuses = Lead::STATUSES;
-        $sources = Lead::SOURCES;
+        $sources = Lead::whereNotNull('source')->distinct()->pluck('source');
         $salesUsers = \App\Models\User::whereIn('role', ['admin', 'sales'])->get();
 
         return view('leads.index', compact('leads', 'statuses', 'sources', 'stats', 'salesUsers'));
@@ -69,7 +69,14 @@ class LeadController extends Controller
     public function create()
     {
         $staff = \App\Models\User::whereIn('role', ['admin', 'sales'])->get();
-        return view('leads.create', compact('staff'));
+        $sources = Lead::whereNotNull('source')->distinct()->pluck('source');
+        
+        $allServices = Lead::whereNotNull('services')->pluck('services')->flatten()->unique()->filter()->values()->all();
+        if (empty($allServices)) {
+            $allServices = ['ISO 9001', 'ISO 14001', 'ISO 45001', 'ISO 27001', 'CE Marking', 'BIS Certification', 'FSSAI', 'GMP', 'Hallmark', 'GST Registration'];
+        }
+
+        return view('leads.create', compact('staff', 'sources', 'allServices'));
     }
 
     public function store(Request $request)
@@ -81,12 +88,19 @@ class LeadController extends Controller
             'alternate_mobile' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'city' => 'nullable|string|max:255',
-            'source' => 'required|in:Website,LinkedIn,Instagram,Cold Call,Direct Visit,Other',
+            'source' => 'required|string|max:255',
             'services' => 'nullable|array',
             'assigned_to' => 'nullable|exists:users,id',
         ]);
 
         $validated['created_by'] = Auth::id();
+
+        $services = $validated['services'] ?? [];
+        if ($request->filled('custom_services')) {
+            $custom = array_filter(array_map('trim', explode(',', $request->custom_services)));
+            $services = array_unique(array_merge($services, $custom));
+        }
+        $validated['services'] = array_values($services);
 
         $lead = Lead::create($validated);
 

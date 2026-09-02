@@ -16,7 +16,14 @@ class HistoryController extends Controller
         }
 
         if ($request->filled('search')) {
-            $query->where('remark', 'like', '%' . $request->search . '%');
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('remark', 'like', "%{$search}%")
+                  ->orWhereHas('lead', function ($leadQuery) use ($search) {
+                      $leadQuery->where('contact_person', 'like', "%{$search}%")
+                                ->orWhere('company_name', 'like', "%{$search}%");
+                  });
+            });
         }
 
         $activities = $query->latest()->paginate(20)->withQueryString();
