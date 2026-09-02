@@ -3,6 +3,9 @@
         <button class="btn btn-outline-secondary d-md-none me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
             <i class="bi bi-list fs-5"></i>
         </button>
+        <button onclick="history.back()" class="btn btn-sm btn-light border shadow-sm me-3" title="Go Back">
+            <i class="bi bi-arrow-left"></i> Back
+        </button>
         <div>
             <h4 class="mb-0 fw-bold text-dark">@yield('title', 'Dashboard')</h4>
             @hasSection('subtitle')

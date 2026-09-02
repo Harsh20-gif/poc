@@ -175,6 +175,55 @@ class ClientController extends Controller
         return redirect()->route('clients.index')->with('success', 'Client created successfully.')->with('client_modal', false);
     }
 
+    public function edit(Client $client)
+    {
+        return view('clients.edit', compact('client'));
+    }
+
+    public function update(Request $request, Client $client)
+    {
+        $validator = Validator::make($request->all(), [
+            'company_name' => 'required|string|max:255',
+            'owner' => 'required|string|max:255',
+            'address' => 'nullable|string|max:500',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'zip' => 'nullable|string|max:50',
+            'country' => 'nullable|string|max:255',
+            'phone' => 'required|string|max:50',
+            'website' => 'nullable|url|max:255',
+            'vat_number' => 'nullable|string|max:255',
+            'client_group' => 'nullable|string|max:255',
+            'currency' => 'required|string|in:INR,USD,EUR,GBP',
+            'currency_symbol' => 'required|string|max:5',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('clients.edit', $client)
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $client->update([
+            'company_name' => $request->company_name,
+            'client_name' => $request->owner,
+            'owner' => $request->owner,
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'zip' => $request->zip,
+            'country' => $request->country,
+            'phone' => $request->phone,
+            'website' => $request->website,
+            'vat_number' => $request->vat_number,
+            'client_group' => $request->client_group,
+            'currency' => $request->currency,
+            'currency_symbol' => $request->currency_symbol,
+        ]);
+
+        return redirect()->route('clients.show', $client)->with('success', 'Client updated successfully.');
+    }
+
     public function show(Client $client)
     {
         $client->load(['lead.interactions.user', 'documents.verifier', 'certifications.documents']);

@@ -44,6 +44,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/leads/{lead}/convert', [LeadController::class, 'convert'])->name('leads.convert');
         
         Route::post('/clients', [ClientController::class, 'store'])->name('clients.store');
+        Route::get('/clients/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit');
+        Route::put('/clients/{client}', [ClientController::class, 'update'])->name('clients.update');
         Route::post('/leads/{lead}/interactions', [LeadInteractionController::class, 'store'])->name('interactions.store');
         
         Route::get('/renewals', [CertificationController::class, 'renewals'])->name('renewals.index');

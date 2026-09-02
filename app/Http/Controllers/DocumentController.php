@@ -19,13 +19,26 @@ class DocumentController extends Controller
         $file = $request->file('document_file');
         $path = $file->storeAs("client-documents/{$client->id}", $file->getClientOriginalName(), 'public');
 
-        ClientDocument::create([
-            'client_id' => $client->id,
-            'document_type' => $request->document_type,
-            'file_path' => $path,
-            'original_filename' => $file->getClientOriginalName(),
-            'verification_status' => 'pending',
-        ]);
+        $existingDoc = ClientDocument::where('client_id', $client->id)
+            ->where('document_type', $request->document_type)
+            ->whereNull('file_path')
+            ->first();
+
+        if ($existingDoc) {
+            $existingDoc->update([
+                'file_path' => $path,
+                'original_filename' => $file->getClientOriginalName(),
+                'verification_status' => 'pending',
+            ]);
+        } else {
+            ClientDocument::create([
+                'client_id' => $client->id,
+                'document_type' => $request->document_type,
+                'file_path' => $path,
+                'original_filename' => $file->getClientOriginalName(),
+                'verification_status' => 'pending',
+            ]);
+        }
 
         return redirect()->route('clients.show', $client)->with('success', 'Document uploaded.');
     }

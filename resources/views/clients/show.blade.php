@@ -81,9 +81,6 @@
     <li class="nav-item" role="presentation">
         <button class="nav-link fw-medium" id="timeline-tab" data-bs-toggle="tab" data-bs-target="#timeline" type="button" role="tab" aria-controls="timeline" aria-selected="false">Communication Timeline</button>
     </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link fw-medium" id="lead-history-tab" data-bs-toggle="tab" data-bs-target="#lead-history" type="button" role="tab" aria-controls="lead-history" aria-selected="false">Lead History</button>
-    </li>
 </ul>
 
 <!-- Tab Content -->
@@ -99,9 +96,6 @@
     </div>
     <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
         @include('clients.tabs.timeline')
-    </div>
-    <div class="tab-pane fade" id="lead-history" role="tabpanel" aria-labelledby="lead-history-tab">
-        @include('clients.tabs.lead-history')
     </div>
 </div>
 

@@ -1,7 +1,7 @@
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
         <h6 class="mb-0 fw-bold">Client Information</h6>
-        <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil me-1"></i> Edit</button>
+        <a href="{{ route('clients.edit', $client) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil me-1"></i> Edit</a>
     </div>
     <div class="card-body">
         <div class="row g-4">
