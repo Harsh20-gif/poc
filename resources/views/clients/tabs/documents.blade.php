@@ -26,31 +26,37 @@
         <div class="d-flex flex-column gap-3">
             @forelse($client->documents as $doc)
                 <div class="bg-white p-3 border rounded shadow-sm">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <h6 class="mb-1 fw-bold">{{ $doc->document_type }}</h6>
-                            <a href="{{ Storage::url($doc->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary mt-1 py-0 px-2" style="font-size: 12px;"><i class="bi bi-eye"></i> View</a>
-                            @if($doc->original_filename)
-                                <span class="small text-muted ms-2">{{ $doc->original_filename }}</span>
+                            <div class="mt-2">
+                                <a href="{{ Storage::url($doc->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary py-0 px-2" style="font-size: 12px;"><i class="bi bi-eye"></i> View</a>
+                                @if($doc->original_filename)
+                                    <span class="small text-muted ms-2">{{ $doc->original_filename }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column align-items-end gap-2">
+                            <span class="badge bg-{{ $doc->verification_status === 'verified' ? 'success' : ($doc->verification_status === 'rejected' ? 'danger' : 'warning text-dark') }}">{{ ucfirst($doc->verification_status) }}</span>
+                            
+                            @if(in_array(Auth::user()->role, ['admin', 'verifier']) && $doc->verification_status === 'pending')
+                                <div class="d-flex gap-2">
+                                    <form action="{{ route('documents.verify', $doc) }}" method="POST">
+                                        @csrf
+                                        <button class="btn btn-sm btn-success px-3 py-0" style="font-size: 12px;">Verify</button>
+                                    </form>
+                                    <button class="btn btn-sm btn-outline-danger px-3 py-0" style="font-size: 12px;" data-bs-toggle="modal" data-bs-target="#rejectDocModal{{ $doc->id }}">Reject</button>
+                                </div>
                             @endif
                         </div>
-                        <span class="badge bg-{{ $doc->verification_status === 'verified' ? 'success' : ($doc->verification_status === 'rejected' ? 'danger' : 'warning text-dark') }}">{{ ucfirst($doc->verification_status) }}</span>
                     </div>
                     
                     @if($doc->verification_status === 'rejected')
                         <div class="alert alert-danger p-2 small mt-2 mb-0">Reason: {{ $doc->rejection_reason }}</div>
                     @endif
-
-                    @if(in_array(Auth::user()->role, ['admin', 'verifier']) && $doc->verification_status === 'pending')
-                        <div class="d-flex gap-2 mt-3 pt-2 border-top">
-                            <form action="{{ route('documents.verify', $doc) }}" method="POST" class="flex-fill">
-                                @csrf
-                                <button class="btn btn-sm btn-success w-100">Verify</button>
-                            </form>
-                            <button class="btn btn-sm btn-outline-danger flex-fill" data-bs-toggle="modal" data-bs-target="#rejectDocModal{{ $doc->id }}">Reject</button>
-                        </div>
                         
                         <!-- Reject Doc Modal -->
+                    @if(in_array(Auth::user()->role, ['admin', 'verifier']) && $doc->verification_status === 'pending')
                         <div class="modal fade" id="rejectDocModal{{ $doc->id }}" tabindex="-1">
                             <div class="modal-dialog">
                                 <div class="modal-content">
