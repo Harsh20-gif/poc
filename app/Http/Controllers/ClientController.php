@@ -3,23 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ClientController extends Controller
 {
-    public function index(Request $request)
+    private function buildClientQuery(Request $request)
     {
-        $stats = [
-            'total_leads' => \App\Models\Lead::where('is_active', true)->count(),
-            'pipeline_value' => Client::where('verification_status', '!=', 'completed')->sum('deal_amount'),
-            'total_clients' => Client::count(),
-            'active_certificates' => \App\Models\Certification::where('status', 'active')->count(),
-            'completed_projects' => Client::where('verification_status', 'completed')->count(),
-            'staff_members' => \App\Models\User::count(),
-        ];
-
-        $query = Client::with('lead.assignee');
+        $query = Client::with('lead.assignee')->withCount(['certifications as active_certificates' => function ($q) {
+            $q->where('status', 'active');
+        }]);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -31,9 +26,100 @@ class ClientController extends Controller
             });
         }
 
+        if ($request->filled('status') && $request->status !== 'All') {
+            $statusMap = [
+                'Pending' => 'pending',
+                'Survey Scheduled' => 'scheduled',
+                'Verified' => 'completed',
+            ];
+            $mappedStatus = $statusMap[$request->status] ?? null;
+            if ($mappedStatus) {
+                $query->where('verification_status', $mappedStatus);
+            }
+        }
+
+        if ($request->filled('client_group') && $request->client_group !== 'All Groups') {
+            $query->where('client_group', $request->client_group);
+        }
+
+        if ($request->filled('assigned_to') && auth()->user()->role === 'admin' && $request->assigned_to !== 'All') {
+            $query->whereHas('lead', function ($q) use ($request) {
+                $q->where('assigned_to', $request->assigned_to);
+            });
+        }
+
+        return $query;
+    }
+
+    public function index(Request $request)
+    {
+        $stats = [
+            'total_leads' => \App\Models\Lead::where('is_active', true)->count(),
+            'pipeline_value' => Client::where('verification_status', '!=', 'completed')->sum('deal_amount'),
+            'total_clients' => Client::count(),
+            'active_certificates' => \App\Models\Certification::where('status', 'active')->count(),
+            'completed_projects' => Client::where('verification_status', 'completed')->count(),
+            'staff_members' => \App\Models\User::count(),
+        ];
+
+        $staff = User::whereIn('role', ['admin', 'sales'])->get();
+        $clientGroups = Client::whereNotNull('client_group')->where('client_group', '!=', '')->distinct()->pluck('client_group');
+
+        $query = $this->buildClientQuery($request);
         $clients = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
 
-        return view('clients.index', compact('clients', 'stats'));
+        return view('clients.index', compact('clients', 'stats', 'staff', 'clientGroups'));
+    }
+
+    public function export(Request $request)
+    {
+        $query = $this->buildClientQuery($request);
+
+        $response = new StreamedResponse(function () use ($query) {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, [
+                'ID',
+                'Company Name',
+                'Contact Person',
+                'Client Group',
+                'Services',
+                'Deal Amount',
+                'Verification Status',
+                'Active Certificates',
+                'Assigned Staff'
+            ]);
+
+            $query->chunk(100, function ($clients) use ($handle) {
+                foreach ($clients as $client) {
+                    $services = is_string($client->finalized_services) ? json_decode($client->finalized_services, true) : $client->finalized_services;
+                    $servicesStr = is_array($services) ? implode(', ', $services) : '';
+
+                    $statusMap = [
+                        'pending' => 'Pending',
+                        'scheduled' => 'Survey Scheduled',
+                        'completed' => 'Verified'
+                    ];
+
+                    fputcsv($handle, [
+                        $client->id,
+                        $client->company_name ?? '—',
+                        $client->client_name,
+                        $client->client_group ?? '—',
+                        $servicesStr,
+                        $client->currency_symbol . number_format($client->deal_amount, 2),
+                        $statusMap[$client->verification_status] ?? $client->verification_status,
+                        $client->active_certificates,
+                        $client->lead?->assignee?->name ?? '—'
+                    ]);
+                }
+            });
+            fclose($handle);
+        });
+
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="clients_export.csv"');
+
+        return $response;
     }
 
     public function store(Request $request)

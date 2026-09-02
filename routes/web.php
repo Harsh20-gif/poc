@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
 
     // All Authenticated users can view clients
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
+    Route::get('/clients/export', [ClientController::class, 'export'])->name('clients.export');
     Route::get('/clients/{client}', [ClientController::class, 'show'])->name('clients.show');
     
     // Certificates Directory

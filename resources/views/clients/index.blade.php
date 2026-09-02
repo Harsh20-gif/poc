@@ -32,11 +32,40 @@
     </div>
     <div class="card-body px-4 pt-3 pb-4">
         <form method="GET" action="{{ route('clients.index') }}" class="row g-3 align-items-center mb-4">
-            <div class="col-md-4">
-                <input type="text" name="search" class="form-control text-dark border-secondary rounded-pill" placeholder="Search Company or Client Name..." value="{{ request('search') }}">
+            <div class="col-md-3">
+                <input type="text" name="search" class="form-control text-dark border-secondary rounded-pill" placeholder="Search Company or Client..." value="{{ request('search') }}">
             </div>
             <div class="col-md-2">
-                <button type="submit" class="btn btn-secondary rounded-pill w-100">Search</button>
+                <select name="status" class="form-select border-secondary rounded-pill text-dark" onchange="this.form.submit()">
+                    <option value="All" {{ request('status') === 'All' ? 'selected' : '' }}>All Status</option>
+                    <option value="Verified" {{ request('status') === 'Verified' ? 'selected' : '' }}>Verified</option>
+                    <option value="Pending" {{ request('status') === 'Pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="Survey Scheduled" {{ request('status') === 'Survey Scheduled' ? 'selected' : '' }}>Survey Scheduled</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="client_group" class="form-select border-secondary rounded-pill text-dark" onchange="this.form.submit()">
+                    <option value="All Groups" {{ request('client_group') === 'All Groups' ? 'selected' : '' }}>All Groups</option>
+                    @foreach($clientGroups as $group)
+                        <option value="{{ $group }}" {{ request('client_group') === $group ? 'selected' : '' }}>{{ $group }}</option>
+                    @endforeach
+                </select>
+            </div>
+            @if(auth()->user()->role === 'admin')
+            <div class="col-md-2">
+                <select name="assigned_to" class="form-select border-secondary rounded-pill text-dark" onchange="this.form.submit()">
+                    <option value="All" {{ request('assigned_to') === 'All' ? 'selected' : '' }}>All Staff</option>
+                    @foreach($staff as $user)
+                        <option value="{{ $user->id }}" {{ request('assigned_to') == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            @endif
+            <div class="col-md-auto ms-auto d-flex gap-2">
+                <button type="submit" class="btn btn-secondary rounded-pill px-4">Filter</button>
+                <a href="{{ route('clients.export', request()->all()) }}" class="btn btn-success rounded-pill px-4 text-white">
+                    <i class="bi bi-file-earmark-excel me-1"></i> Excel
+                </a>
             </div>
         </form>
         
@@ -44,12 +73,14 @@
             <table class="table table-borderless table-hover align-middle mb-0 text-dark">
                 <thead style="border-bottom: 1px solid var(--card-border);">
                     <tr>
+                        <th class="text-muted small text-uppercase pb-3">ID</th>
                         <th class="text-muted small text-uppercase pb-3">Company Name</th>
                         <th class="text-muted small text-uppercase pb-3">Contact Person</th>
-                        <th class="text-muted small text-uppercase pb-3">Phone/Email</th>
-                        <th class="text-muted small text-uppercase pb-3">City</th>
-                        <th class="text-muted small text-uppercase pb-3">Service Type</th>
-                        <th class="text-muted small text-uppercase pb-3">Converted Date</th>
+                        <th class="text-muted small text-uppercase pb-3">Client Group</th>
+                        <th class="text-muted small text-uppercase pb-3">Services</th>
+                        <th class="text-muted small text-uppercase pb-3">Deal Amount</th>
+                        <th class="text-muted small text-uppercase pb-3">Verification Status</th>
+                        <th class="text-muted small text-uppercase pb-3">Active Certificates</th>
                         <th class="text-muted small text-uppercase pb-3">Assigned Staff</th>
                         <th class="text-muted small text-uppercase pb-3 text-end">Actions</th>
                     </tr>
@@ -57,13 +88,14 @@
                 <tbody>
                     @forelse($clients as $client)
                     <tr style="border-bottom: 1px solid var(--card-border);">
-                        <td class="py-3 fw-medium text-dark">{{ $client->company_name ?? '—' }}</td>
+                        <td class="py-3 text-dark">#{{ $client->id }}</td>
+                        <td class="py-3 fw-medium text-dark">
+                            <a href="{{ route('clients.show', $client) }}" class="text-decoration-none text-primary">{{ $client->company_name ?? '—' }}</a>
+                        </td>
                         <td class="py-3 text-dark">{{ $client->client_name }}</td>
                         <td class="py-3">
-                            <div class="fw-bold text-dark">{{ $client->lead?->mobile ?? '—' }}</div>
-                            <div class="text-muted small">{{ $client->lead?->email ?? '—' }}</div>
+                            <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary">{{ $client->client_group ?? '—' }}</span>
                         </td>
-                        <td class="py-3 text-dark">{{ $client->city ?? $client->lead?->city ?? '—' }}</td>
                         <td class="py-3">
                             @php
                                 $services = is_string($client->finalized_services) ? json_decode($client->finalized_services, true) : $client->finalized_services;
@@ -78,10 +110,26 @@
                             @endif
                         </td>
                         <td class="py-3 text-dark">
-                            @if($client->conversion_date)
-                                {{ \Carbon\Carbon::parse($client->conversion_date)->format('M d, Y') }}
+                            {{ $client->currency_symbol }}{{ number_format($client->deal_amount, 2) }}
+                        </td>
+                        <td class="py-3">
+                            @if($client->verification_status === 'pending')
+                                <span class="badge rounded-pill bg-secondary text-white">Pending</span>
+                            @elseif($client->verification_status === 'scheduled')
+                                <span class="badge rounded-pill bg-warning text-dark">Survey Scheduled</span>
+                            @elseif($client->verification_status === 'completed')
+                                <span class="badge rounded-pill bg-success text-white">Verified</span>
                             @else
-                                <span class="text-muted">—</span>
+                                <span class="badge rounded-pill bg-light text-dark">{{ ucfirst($client->verification_status) }}</span>
+                            @endif
+                        </td>
+                        <td class="py-3">
+                            @if($client->active_certificates > 0)
+                                <a href="{{ route('clients.show', $client) }}#certifications" class="badge rounded-pill bg-info text-white text-decoration-none px-3">
+                                    {{ $client->active_certificates }}
+                                </a>
+                            @else
+                                <span class="text-muted small">0</span>
                             @endif
                         </td>
                         <td class="py-3">
@@ -97,12 +145,12 @@
                             @endif
                         </td>
                         <td class="py-3 text-end">
-                            <a href="{{ route('clients.show', $client) }}" class="btn btn-sm btn-outline-secondary text-dark border-secondary">View</a>
+                            <a href="{{ route('clients.show', $client) }}" class="btn btn-sm btn-outline-secondary text-dark border-secondary">Edit</a>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="text-center py-5 text-muted">No converted clients yet.</td>
+                        <td colspan="10" class="text-center py-5 text-muted">No converted clients yet.</td>
                     </tr>
                     @endforelse
                 </tbody>
