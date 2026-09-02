@@ -88,10 +88,16 @@ class LeadController extends Controller
             'alternate_mobile' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'city' => 'nullable|string|max:255',
-            'source' => 'required|string|max:255',
+            'source' => 'required|in:Facebook,Instagram,Google,WhatsApp,Other',
+            'source_custom' => 'required_if:source,Other|nullable|string|max:255',
             'services' => 'nullable|array',
             'assigned_to' => 'nullable|exists:users,id',
         ]);
+
+        if ($validated['source'] === 'Other' && !empty($validated['source_custom'])) {
+            $validated['source'] = $validated['source_custom'];
+        }
+        unset($validated['source_custom']);
 
         $validated['created_by'] = Auth::id();
 
@@ -111,6 +117,10 @@ class LeadController extends Controller
             'remark' => 'Lead created manually.',
             'details' => ['source' => $lead->source]
         ]);
+
+        if ($request->filled('redirect_back')) {
+            return redirect()->back()->with('success', 'Lead created successfully.');
+        }
 
         return redirect()->route('leads.index')->with('success', 'Lead created successfully.');
     }

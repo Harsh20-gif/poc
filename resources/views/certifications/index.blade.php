@@ -6,9 +6,9 @@
     <button class="btn btn-outline-secondary text-dark border-secondary me-2" onclick="window.location.reload()">
         <i class="bi bi-arrow-clockwise me-1"></i> Refresh Data
     </button>
-    <a href="{{ route('leads.create') }}" class="btn text-white border-0 shadow-sm me-2" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">
+    <button type="button" class="btn text-white border-0 shadow-sm me-2" style="background: linear-gradient(135deg, #0284c7, #38bdf8);" data-bs-toggle="modal" data-bs-target="#newLeadModal">
         <i class="bi bi-plus-lg me-1"></i> New Lead
-    </a>
+    </button>
     <a href="{{ route('admin.staff.create') }}" class="btn btn-outline-secondary text-dark border-secondary"><i class="bi bi-person-plus"></i> Add Staff</a>
 @endsection
 
