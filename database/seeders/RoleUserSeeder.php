@@ -16,19 +16,19 @@ class RoleUserSeeder extends Seeder
         $users = [
             [
                 'name' => 'Admin User',
-                'email' => 'admin@proofofcontent.test',
+                'email' => 'admin@omega.com',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
             ],
             [
                 'name' => 'Sales Representative',
-                'email' => 'sales@proofofcontent.test',
+                'email' => 'sales@omega.com',
                 'password' => Hash::make('password'),
                 'role' => 'sales',
             ],
             [
                 'name' => 'Verifier / Backoffice',
-                'email' => 'verifier@proofofcontent.test',
+                'email' => 'verifier@omega.com',
                 'password' => Hash::make('password'),
                 'role' => 'verifier',
             ]

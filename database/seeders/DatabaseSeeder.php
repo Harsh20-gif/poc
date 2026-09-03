@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         $alice = User::firstOrCreate(['email' => 'alice@omega.com'], [
             'name' => 'Alice Smith',
             'password' => Hash::make('password'),
-            'role' => 'user',
+            'role' => 'admin',
         ]);
 
         $bob = User::firstOrCreate(['email' => 'bob@omega.com'], [

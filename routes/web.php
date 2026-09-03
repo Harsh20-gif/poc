@@ -20,6 +20,12 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Profile Routes
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::post('/profile/photo', [\App\Http\Controllers\ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
+
     // Admin Only Routes
     Route::middleware('role:admin')->group(function () {
         Route::get('/staff', [\App\Http\Controllers\StaffController::class, 'index'])->name('admin.staff.index');
@@ -50,7 +56,6 @@ Route::middleware('auth')->group(function () {
         
         Route::get('/renewals', [CertificationController::class, 'renewals'])->name('renewals.index');
         
-        Route::get('/history', [\App\Http\Controllers\HistoryController::class, 'index'])->name('history');
     });
 
     // All Authenticated users can view clients

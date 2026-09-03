@@ -17,12 +17,7 @@
 
 @section('content')
 
-@if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
+
 
 @include('layouts.partials.stat_cards')
 
@@ -176,16 +171,7 @@
             <form action="{{ route('clients.store') }}" method="POST" id="newClientForm">
                 @csrf
                 <div class="modal-body px-4 pb-4">
-                    @if($errors->any())
-                        <div class="alert alert-danger py-2 mb-3" role="alert">
-                            <strong>Please fix the following:</strong>
-                            <ul class="mb-0 ps-3 mt-2">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+
 
                     <div class="row g-3">
                         <div class="col-md-6">

@@ -16,6 +16,7 @@
             </div>
         </main>
     </div>
+    @include('layouts.partials.toasts')
     @include('layouts.partials.scripts')
     @include('leads.partials.create_modal')
 </body>

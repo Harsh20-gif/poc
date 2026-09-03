@@ -9,7 +9,7 @@
         <div class="card login-card">
             <div class="card-body p-4">
                 <div class="text-center mb-4">
-                    <div class="badge bg-primary text-wrap mb-3 fs-5 p-2 rounded-3 shadow-sm">Omega-QMS</div>
+                    <img src="{{ asset('img/logo.jpeg') }}" alt="Logo" class="img-fluid mb-3" style="max-height: 80px;">
                     <h4 class="fw-bold text-dark-custom">Omega-QMS</h4>
                     <p class="text-muted">Sign in to your account</p>
                 </div>
@@ -51,6 +51,7 @@
         </div>
     </div>
 
+    @include('layouts.partials.toasts')
     @include('layouts.partials.scripts')
 </body>
 </html>

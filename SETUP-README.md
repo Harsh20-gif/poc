@@ -1,4 +1,4 @@
-# Proof of Content CRM
+# Omega-QMS CRM
 
 A lightweight CRM for certification/compliance services built with Laravel 11.
 
@@ -23,9 +23,9 @@ A lightweight CRM for certification/compliance services built with Laravel 11.
 
 3. **Test Users Available**
    All passwords are: `password`
-   - `admin@proofofcontent.test` (Role: admin)
-   - `sales@proofofcontent.test` (Role: sales)
-   - `verifier@proofofcontent.test` (Role: verifier)
+   - `admin@omega.com` (Role: admin)
+   - `sales@omega.com` (Role: sales)
+   - `verifier@omega.com` (Role: verifier)
 
 4. **Storage Link**
    To make uploaded client documents and certificates publicly accessible, ensure you link the storage:

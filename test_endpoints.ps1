@@ -28,7 +28,7 @@ if ($res2.Content -match 'name="_token" value="([^"]+)"') {
 Write-Host "`n--- Test 3: POST /login (Admin) ---"
 $adminBody = @{
     "_token" = $csrf
-    "email" = "admin@proofofcontent.test"
+    "email" = "admin@omega.com"
     "password" = "password"
 }
 $res3 = Invoke-WebRequest -Uri "http://127.0.0.1:8000/login" -Method POST -Body $adminBody -WebSession $session -MaximumRedirection 0 -ErrorAction SilentlyContinue
@@ -47,7 +47,7 @@ if ($resGet.Content -match 'name="_token" value="([^"]+)"') {
 }
 $userBody = @{
     "_token" = $csrfUser
-    "email" = "user@proofofcontent.test"
+    "email" = "user@omega.com"
     "password" = "password"
 }
 $res4 = Invoke-WebRequest -Uri "http://127.0.0.1:8000/login" -Method POST -Body $userBody -WebSession $sessionUser -MaximumRedirection 0 -ErrorAction SilentlyContinue
