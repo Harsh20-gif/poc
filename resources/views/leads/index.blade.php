@@ -106,15 +106,15 @@
                         </td>
                         <td class="py-3">
                             @php
-                                $statusConfig = match($lead->status) {
-                                    'new', 'pending' => ['bg' => 'rgba(59, 130, 246, 0.1)', 'color' => '#3B82F6'], // Blue
-                                    'in_conversation' => ['bg' => 'rgba(139, 92, 246, 0.1)', 'color' => '#8B5CF6'], // Purple
-                                    'proposal_sent' => ['bg' => 'rgba(245, 158, 11, 0.1)', 'color' => '#F59E0B'], // Orange
-                                    'converted' => ['bg' => 'rgba(16, 185, 129, 0.1)', 'color' => '#10B981'], // Green
-                                    'deactivated', 'lost' => ['bg' => 'rgba(239, 68, 68, 0.1)', 'color' => '#EF4444'], // Red
-                                    'renewal' => ['bg' => 'rgba(245, 158, 11, 0.1)', 'color' => '#F59E0B'], // Orange
-                                    default => ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#94A3B8']
-                                };
+                                $statusColors = [
+                                    'new' => ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#64748B'],
+                                    'pending' => ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#64748B'],
+                                    'in_conversation' => ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#64748B'],
+                                    'proposal_sent' => ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#64748B'],
+                                    'converted' => ['bg' => 'rgba(37, 99, 235, 0.1)', 'color' => '#2563EB'],
+                                    'renewal' => ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#64748B'],
+                                ];
+                                $statusConfig = $statusColors[$lead->status] ?? ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#94A3B8'];
                             @endphp
                             <span class="badge rounded-pill px-3 fw-medium" style="background-color: {{ $statusConfig['bg'] }}; color: {{ $statusConfig['color'] }};">
                                 {{ $statuses[$lead->status] ?? ucfirst(str_replace('_', ' ', $lead->status)) }}
@@ -146,9 +146,9 @@
                         <td class="py-3 text-end">
                             <a href="{{ route('leads.show', $lead) }}" class="btn btn-sm btn-outline-secondary text-dark border-secondary me-1">View</a>
                             @if($lead->status === 'converted')
-                                <span class="badge bg-success bg-opacity-25 text-success rounded-pill px-3 py-2 border border-success border-opacity-25">Converted</span>
+                                <span class="badge bg-primary bg-opacity-25 text-primary rounded-pill px-3 py-2 border border-primary border-opacity-25">Converted</span>
                             @else
-                                <button type="button" class="btn btn-sm text-white" style="background-color: #10B981;" onclick="openCertifyModal({{ $lead->id }}, '{{ addslashes($lead->company_name ?: $lead->contact_person) }}')">
+                                <button type="button" class="btn btn-sm btn-primary text-white" onclick="openCertifyModal({{ $lead->id }}, '{{ addslashes($lead->company_name ?: $lead->contact_person) }}')">
                                     Certify Lead
                                 </button>
                             @endif
@@ -202,7 +202,7 @@
                 </div>
                 <div class="modal-footer border-secondary border-opacity-25">
                     <button type="button" class="btn btn-outline-secondary text-dark" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn text-white" style="background-color: #10B981;">Certify Lead</button>
+                    <button type="submit" class="btn btn-primary text-white">Certify Lead</button>
                 </div>
             </form>
         </div>

@@ -1,14 +1,16 @@
 :root {
-    --primary: #0284c7; /* Sky 600 */
-    --primary-hover: #0369a1; /* Sky 700 */
-    --primary-light: #e0f2fe; /* Sky 100 */
-    --dark: #0f172a;
-    --muted: #64748b;
-    --bg-page: #f0f9ff; /* Sky 50 */
+    --brand-primary: #2563eb;
+    --brand-primary-hover: #1e4fcc;
+    --brand-primary-light: #eff4ff;
+    --brand-danger: #dc2626;
+    --brand-danger-light: #fef2f2;
+    --brand-dark: #0f172a;
+    --brand-gray: #64748b;
+    --brand-bg: #f8fafc;
     --card-bg: #ffffff;
-    --card-border: #e0f2fe; /* Sky 100 */
+    --card-border: var(--brand-primary-light);
     --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-    --text-main: #0f172a;
+    --text-main: var(--brand-dark);
 }
 
 html {
@@ -16,7 +18,7 @@ html {
 }
 
 body {
-    background-color: var(--bg-page);
+    background-color: var(--brand-bg);
     font-family: 'Inter', sans-serif;
     font-size: 1rem;
     line-height: 1.5;
@@ -46,10 +48,41 @@ body {
 
 .sidebar-desktop {
     width: 220px;
+    transition: width 0.3s ease;
 }
 
 .main-content {
     margin-left: 220px;
+    transition: margin-left 0.3s ease;
+}
+
+body.sidebar-collapsed .sidebar-desktop {
+    width: 70px;
+}
+
+body.sidebar-collapsed .main-content {
+    margin-left: 70px;
+}
+
+body.sidebar-collapsed .sidebar-desktop span {
+    display: none;
+}
+
+body.sidebar-collapsed .sidebar-desktop h5 {
+    display: none;
+}
+
+body.sidebar-collapsed .sidebar-desktop .logo-area {
+    justify-content: center !important;
+    padding: 1rem 0;
+}
+
+body.sidebar-collapsed .sidebar-desktop .nav-link {
+    justify-content: center;
+}
+
+body.sidebar-collapsed .sidebar-desktop .nav-link i {
+    margin: 0 !important;
 }
 
 .logo-area {
@@ -70,7 +103,7 @@ body {
 
 /* Auth Pages */
 .login-bg {
-    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-hover));
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -84,7 +117,7 @@ body {
     max-width: 400px;
 }
 
-.text-dark-custom { color: var(--dark) !important; }
+.text-dark-custom { color: var(--brand-dark) !important; }
 
 /* Dashboard Layout */
 .wrapper {
@@ -155,7 +188,7 @@ body.sidebar-collapsed .main-content {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .nav-link {
-    color: var(--muted);
+    color: var(--brand-gray);
     padding: 0.75rem 1rem;
     border-radius: 10px;
     margin-bottom: 0.25rem;
@@ -164,18 +197,18 @@ body.sidebar-collapsed .main-content {
 }
 
 .nav-link:hover, .nav-link.active {
-    color: var(--primary);
-    background-color: var(--primary-light);
+    color: var(--brand-primary);
+    background-color: var(--brand-primary-light);
 }
 
 .nav-link.active {
-    color: var(--primary);
-    background-color: var(--primary-light);
+    color: var(--brand-primary);
+    background-color: var(--brand-primary-light);
     font-weight: 600;
 }
 
 .topbar {
-    background: var(--bg-page);
+    background: var(--brand-bg);
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--card-border);
     display: flex;
@@ -200,13 +233,13 @@ body.sidebar-collapsed .main-content {
 }
 
 .btn-primary {
-    background-color: var(--primary);
-    border-color: var(--primary);
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-hover);
-    border-color: var(--primary-hover);
+    background-color: var(--brand-primary-hover);
+    border-color: var(--brand-primary-hover);
 }
 
 /* Form controls */
@@ -217,7 +250,7 @@ body.sidebar-collapsed .main-content {
 }
 
 .form-control:focus, .form-select:focus {
-    border-color: var(--primary);
+    border-color: var(--brand-primary);
     box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
 }
 
@@ -231,11 +264,11 @@ body.sidebar-collapsed .main-content {
     background: white;
 }
 .service-check-wrapper:hover {
-    border-color: var(--primary);
+    border-color: var(--brand-primary);
 }
 .service-check-wrapper.checked {
-    border-color: var(--primary);
-    background-color: var(--primary-light);
+    border-color: var(--brand-primary);
+    background-color: var(--brand-primary-light);
 }
 
 .timeline {
@@ -256,7 +289,7 @@ body.sidebar-collapsed .main-content {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: var(--primary);
+    background: var(--brand-primary);
     border: 2px solid white;
-    box-shadow: 0 0 0 2px var(--primary);
+    box-shadow: 0 0 0 2px var(--brand-primary);
 }

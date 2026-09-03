@@ -22,11 +22,11 @@
             --border-color: rgba(255, 255, 255, 0.08);
             --text-primary: #f3f4f6;
             --text-secondary: #9ca3af;
-            --accent-blue: #3b82f6;
-            --accent-green: #10b981;
-            --accent-purple: #8b5cf6;
-            --accent-orange: #f59e0b;
-            --accent-red: #ef4444;
+            --accent-blue: #2563eb;
+            --accent-green: #2563eb;
+            --accent-purple: #64748b;
+            --accent-orange: #64748b;
+            --accent-red: #dc2626;
             --glass-bg: rgba(255, 255, 255, 0.03);
             --glass-blur: blur(16px);
         }

@@ -21,8 +21,8 @@
             <div class="card-body p-3 d-flex flex-column justify-content-between">
                 <div class="d-flex justify-content-between align-items-start">
                     <span class="text-muted small fw-bold text-uppercase tracking-wider">Pipeline</span>
-                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: rgba(139, 92, 246, 0.1); color: #8B5CF6;">
-                        <i class="bi bi-currency-dollar"></i>
+                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: rgba(37, 99, 235, 0.1); color: #2563EB;">
+                        <i class="bi bi-currency-dollar fs-5"></i>
                     </div>
                 </div>
                 <h3 class="fw-bold mb-0 mt-2 text-dark">${{ number_format(($stats['pipeline_value'] ?? 0) / 1000, 1) }}k</h3>
@@ -36,8 +36,8 @@
             <div class="card-body p-3 d-flex flex-column justify-content-between">
                 <div class="d-flex justify-content-between align-items-start">
                     <span class="text-muted small fw-bold text-uppercase tracking-wider">Clients</span>
-                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: rgba(16, 185, 129, 0.1); color: #10B981;">
-                        <i class="bi bi-building"></i>
+                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: rgba(37, 99, 235, 0.1); color: #2563EB;">
+                        <i class="bi bi-buildings fs-5"></i>
                     </div>
                 </div>
                 <h3 class="fw-bold mb-0 mt-2 text-dark">{{ number_format($stats['total_clients'] ?? 0) }}</h3>
@@ -51,8 +51,8 @@
             <div class="card-body p-3 d-flex flex-column justify-content-between">
                 <div class="d-flex justify-content-between align-items-start">
                     <span class="text-muted small fw-bold text-uppercase tracking-wider">Active Certs</span>
-                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: rgba(59, 130, 246, 0.1); color: #3B82F6;">
-                        <i class="bi bi-award-fill"></i>
+                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: rgba(37, 99, 235, 0.1); color: #2563EB;">
+                        <i class="bi bi-patch-check fs-5"></i>
                     </div>
                 </div>
                 <h3 class="fw-bold mb-0 mt-2 text-dark">{{ number_format($stats['active_certificates'] ?? 0) }}</h3>
@@ -81,8 +81,8 @@
             <div class="card-body p-3 d-flex flex-column justify-content-between">
                 <div class="d-flex justify-content-between align-items-start">
                     <span class="text-muted small fw-bold text-uppercase tracking-wider">Staff</span>
-                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: rgba(245, 158, 11, 0.1); color: #F59E0B;">
-                        <i class="bi bi-people-fill"></i>
+                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: rgba(100, 116, 139, 0.1); color: #64748B;">
+                        <i class="bi bi-people fs-5"></i>
                     </div>
                 </div>
                 <h3 class="fw-bold mb-0 mt-2 text-dark">{{ number_format($stats['staff_members'] ?? 0) }}</h3>

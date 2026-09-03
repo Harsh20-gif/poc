@@ -9,7 +9,7 @@
     <button type="button" class="btn text-white border-0 shadow-sm me-2" style="background: linear-gradient(135deg, #0284c7, #38bdf8);" data-bs-toggle="modal" data-bs-target="#newLeadModal">
         <i class="bi bi-plus-lg me-1"></i> New Lead
     </button>
-    <button type="button" class="btn text-white border-0 shadow-sm me-2" data-bs-toggle="modal" data-bs-target="#newClientModal" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">
+    <button type="button" class="btn btn-primary shadow-sm me-2" data-bs-toggle="modal" data-bs-target="#newClientModal">
         <i class="bi bi-person-plus-fill me-1"></i> New Client
     </button>
     <a href="{{ route('admin.staff.create') }}" class="btn btn-outline-secondary text-dark border-secondary"><i class="bi bi-person-plus"></i> Add Staff</a>
@@ -110,17 +110,17 @@
                         <td class="py-3">
                             @if($client->verification_status === 'pending')
                                 <span class="badge rounded-pill bg-secondary text-white">Pending</span>
-                            @elseif($client->verification_status === 'scheduled')
-                                <span class="badge rounded-pill bg-warning text-dark">Survey Scheduled</span>
+                            @elseif($client->verification_status === 'in_progress')
+                                <span class="badge rounded-pill bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25">Survey Scheduled</span>
                             @elseif($client->verification_status === 'completed')
-                                <span class="badge rounded-pill bg-success text-white">Verified</span>
+                                <span class="badge rounded-pill bg-primary text-white">Verified</span>
                             @else
                                 <span class="badge rounded-pill bg-light text-dark">{{ ucfirst($client->verification_status) }}</span>
                             @endif
                         </td>
                         <td class="py-3">
                             @if($client->active_certificates > 0)
-                                <a href="{{ route('clients.show', $client) }}#certifications" class="badge rounded-pill bg-info text-white text-decoration-none px-3">
+                                <a href="{{ route('clients.show', $client) }}#certifications" class="badge rounded-pill bg-secondary text-white text-decoration-none px-3">
                                     {{ $client->active_certificates }}
                                 </a>
                             @else

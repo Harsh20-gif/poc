@@ -1,7 +1,7 @@
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
     
     @if (session('success'))
-        <div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="4500">
+        <div class="toast align-items-center text-bg-primary border-0 shadow-sm" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="4500">
             <div class="d-flex">
                 <div class="toast-body fw-medium">
                     <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
@@ -23,7 +23,7 @@
     @endif
 
     @if (session('warning'))
-        <div class="toast align-items-center text-bg-warning border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="4500">
+        <div class="toast align-items-center bg-danger bg-opacity-10 text-danger border border-danger shadow-sm" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="4500">
             <div class="d-flex">
                 <div class="toast-body fw-medium text-dark">
                     <i class="bi bi-exclamation-triangle me-2"></i>{{ session('warning') }}
@@ -85,7 +85,8 @@
         msgSpan.innerHTML = message;
         
         if (type === 'success') {
-            template.classList.add('text-bg-success');
+            template.classList.add('text-bg-primary', 'shadow-sm');
+            template.classList.remove('border-0');
             icon.classList.add('bi', 'bi-check-circle');
             closeBtn.classList.add('btn-close-white');
         } else if (type === 'error') {
@@ -93,7 +94,8 @@
             icon.classList.add('bi', 'bi-x-circle');
             closeBtn.classList.add('btn-close-white');
         } else if (type === 'warning') {
-            template.classList.add('text-bg-warning');
+            template.classList.add('bg-danger', 'bg-opacity-10', 'text-danger', 'border', 'border-danger', 'shadow-sm');
+            template.classList.remove('border-0');
             icon.classList.add('bi', 'bi-exclamation-triangle');
             template.querySelector('.toast-body').classList.add('text-dark');
         }

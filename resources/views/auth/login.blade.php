@@ -9,8 +9,10 @@
         <div class="card login-card">
             <div class="card-body p-4">
                 <div class="text-center mb-4">
-                    <img src="{{ asset('img/logo.jpeg') }}" alt="Logo" class="img-fluid mb-3" style="max-height: 80px;">
-                    <h4 class="fw-bold text-dark-custom">Omega-QMS</h4>
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <img src="{{ asset('img/logo.jpeg') }}" alt="Logo" class="img-fluid me-2" style="max-height: 50px;">
+                        <h4 class="fw-bold text-dark-custom mb-0">Omega-QMS</h4>
+                    </div>
                     <p class="text-muted">Sign in to your account</p>
                 </div>
                 

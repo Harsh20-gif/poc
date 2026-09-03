@@ -58,9 +58,9 @@
                         <td class="py-3">
                             @php
                                 $statusConfig = match($cert->status) {
-                                    'active' => ['bg' => 'rgba(16, 185, 129, 0.1)', 'color' => '#10B981'], // Green
-                                    'expiring_soon' => ['bg' => 'rgba(245, 158, 11, 0.1)', 'color' => '#F59E0B'], // Orange
-                                    'expired' => ['bg' => 'rgba(239, 68, 68, 0.1)', 'color' => '#EF4444'], // Red
+                                    'active' => ['bg' => 'rgba(37, 99, 235, 0.1)', 'color' => '#2563EB'], // Blue
+                                    'expiring_soon' => ['bg' => 'var(--brand-danger-light)', 'color' => '#DC2626'], // Pale Red
+                                    'expired' => ['bg' => 'var(--brand-danger-light)', 'color' => '#DC2626'], // Red
                                     'renewal_triggered' => ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#94A3B8'], // Gray
                                     default => ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#94A3B8']
                                 };

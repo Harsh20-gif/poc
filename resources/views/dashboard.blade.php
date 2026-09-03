@@ -52,10 +52,10 @@
                                 <td class="py-3">
                                     @php
                                         $statusConfig = match($client->verification_status) {
-                                            'pending' => ['bg' => 'rgba(59, 130, 246, 0.1)', 'color' => '#3B82F6', 'label' => 'Negotiation'],
-                                            'in_progress' => ['bg' => 'rgba(139, 92, 246, 0.1)', 'color' => '#8B5CF6', 'label' => 'In Progress'],
-                                            'completed' => ['bg' => 'rgba(16, 185, 129, 0.1)', 'color' => '#10B981', 'label' => 'Won'],
-                                            default => ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#94A3B8', 'label' => ucfirst($client->verification_status)]
+                                            'pending' => ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#64748B', 'label' => 'Negotiation'],
+                                            'in_progress' => ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#64748B', 'label' => 'In Progress'],
+                                            'completed' => ['bg' => 'rgba(37, 99, 235, 0.1)', 'color' => '#2563EB', 'label' => 'Won'],
+                                            default => ['bg' => 'rgba(100, 116, 139, 0.1)', 'color' => '#64748B', 'label' => ucfirst($client->verification_status)]
                                         };
                                     @endphp
                                     <span class="badge rounded-pill px-3 fw-medium" style="background-color: {{ $statusConfig['bg'] }}; color: {{ $statusConfig['color'] }};">
@@ -124,13 +124,13 @@
     <div class="col-lg-6">
         <div class="card h-100 border-0" style="background-color: var(--card-bg); border: 1px solid var(--card-border) !important;">
             <div class="card-header border-0 pb-0 pt-4 px-4 d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-clock-history text-warning me-2"></i>Expiring Certificates</h5>
+                <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-clock-history text-danger me-2"></i>Expiring Certificates</h5>
             </div>
             <div class="card-body px-4 pt-3 pb-4">
                 @forelse($expiringCertifications as $cert)
                     <div class="d-flex justify-content-between align-items-center p-3 mb-2 rounded border shadow-sm bg-white">
                         <div>
-                            <h6 class="mb-1 fw-bold text-dark">{{ $cert->certificate_type }} <span class="badge bg-warning text-dark ms-2">{{ \Carbon\Carbon::parse($cert->expiry_date)->diffForHumans() }}</span></h6>
+                            <h6 class="mb-1 fw-bold text-dark">{{ $cert->certificate_type }} <span class="badge text-danger border border-danger border-opacity-50 ms-2" style="background-color: var(--brand-danger-light);">{{ \Carbon\Carbon::parse($cert->expiry_date)->diffForHumans() }}</span></h6>
                             <a href="{{ route('clients.show', $cert->client) }}" class="text-decoration-none small text-muted">{{ $cert->client->company_name ?? $cert->client->client_name }}</a>
                         </div>
                         <a href="{{ route('clients.show', $cert->client) }}" class="btn btn-sm btn-outline-primary">Action</a>

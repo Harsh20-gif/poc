@@ -15,16 +15,16 @@
                             <div class="text-muted small">{{ $cert->certificate_name }}</div>
                         </div>
                         @php
-                            $cBadge = match($cert->status) {
-                                'active' => 'bg-success',
-                                'expiring_soon' => 'bg-warning text-dark',
-                                'expired' => 'bg-danger',
+                            $statusClass = match($cert->status) {
+                                'active' => 'bg-primary',
+                                'expiring_soon' => 'text-danger border border-danger border-opacity-50" style="background-color: var(--brand-danger-light);',
+                                'expired' => 'bg-danger text-white',
                                 'renewal_triggered' => 'bg-secondary',
-                                default => 'bg-light text-dark'
+                                default => 'bg-secondary'
                             };
                         @endphp
                         <div class="text-end">
-                            <span class="badge {{ $cBadge }} mb-2 d-block">{{ ucfirst(str_replace('_', ' ', $cert->status)) }}</span>
+                            <span class="badge {{ $statusClass }} mb-2 d-block">{{ ucfirst(str_replace('_', ' ', $cert->status)) }}</span>
                             @if($cert->certificate_pdf_path)
                                 <a href="{{ Storage::url($cert->certificate_pdf_path) }}" target="_blank" class="btn btn-sm btn-outline-danger"><i class="bi bi-file-pdf"></i> View PDF</a>
                             @endif

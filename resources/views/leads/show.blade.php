@@ -78,9 +78,9 @@
                 </ul>
 
                 @if($lead->is_active && $lead->status !== 'converted')
-                <div class="mt-4 pt-3 border-top d-grid gap-2">
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#convertModal">Convert to Client</button>
-                    <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal">Deactivate</button>
+                <div class="mt-4 pt-3 border-top d-flex gap-2">
+                    <button class="btn btn-primary w-50" data-bs-toggle="modal" data-bs-target="#convertModal">Convert to Client</button>
+                    <button class="btn btn-outline-danger w-50" data-bs-toggle="modal" data-bs-target="#deactivateModal">Deactivate</button>
                 </div>
                 @elseif(!$lead->is_active)
                 <div class="mt-4 pt-3 border-top">
@@ -115,7 +115,7 @@
 <div class="modal fade" id="convertModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-success text-white">
+            <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title">Convert to Client</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>

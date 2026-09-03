@@ -40,9 +40,9 @@
                     </td>
                     <td>
                         @if($cert->status === 'expired')
-                            <span class="badge bg-danger">Expired</span>
+                            <span class="badge bg-danger text-white">Expired</span>
                         @elseif($cert->status === 'expiring_soon')
-                            <span class="badge bg-warning text-dark">Expiring Soon</span>
+                            <span class="badge text-danger border border-danger border-opacity-50" style="background-color: var(--brand-danger-light);">Expiring Soon</span>
                         @else
                             <span class="badge bg-secondary">{{ ucfirst(str_replace('_', ' ', $cert->status)) }}</span>
                         @endif
