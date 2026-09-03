@@ -85,7 +85,7 @@ class LeadController extends Controller
             'contact_person' => 'required|string|max:255',
             'company_name' => 'nullable|string|max:255',
             'mobile' => 'required|string|max:20',
-            'alternate_mobile' => 'nullable|string|max:20',
+
             'email' => 'nullable|email|max:255',
             'city' => 'nullable|string|max:255',
             'source' => 'required|in:Facebook,Instagram,Google,WhatsApp,Other',
@@ -234,7 +234,7 @@ class LeadController extends Controller
     public function update(Request $request, Lead $lead)
     {
         $validated = $request->validate([
-            'alternate_mobile' => 'nullable|string|max:20',
+
             'services' => 'nullable|array',
             'email' => 'nullable|email',
             'city' => 'nullable|string',

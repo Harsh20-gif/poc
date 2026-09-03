@@ -22,14 +22,10 @@
                             <input type="text" name="company_name" class="form-control @error('company_name') is-invalid @enderror" value="{{ old('company_name') }}">
                             @error('company_name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label class="form-label fw-medium">Mobile Number *</label>
                             <input type="text" name="mobile" class="form-control @error('mobile') is-invalid @enderror" value="{{ old('mobile') }}" required>
                             @error('mobile')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-medium">Alternate Mobile</label>
-                            <input type="text" name="alternate_mobile" class="form-control @error('alternate_mobile') is-invalid @enderror" value="{{ old('alternate_mobile') }}">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-medium">Email Address</label>
