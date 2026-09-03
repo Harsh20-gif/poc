@@ -12,8 +12,8 @@ if ($res1.StatusCode -eq 302 -or $res1.StatusCode -eq 301) {
 Write-Host "`n--- Test 2: GET /login ---"
 $res2 = Invoke-WebRequest -Uri "http://127.0.0.1:8000/login" -WebSession $session
 Write-Host "Status Code: " $res2.StatusCode
-if ($res2.Content -match "Proof of Content") {
-    Write-Host "Content verification: 'Proof of Content' heading found."
+if ($res2.Content -match "Omega-QMS") {
+    Write-Host "Content verification: 'Omega-QMS' heading found."
 } else {
     Write-Host "Content verification: Heading NOT found."
 }

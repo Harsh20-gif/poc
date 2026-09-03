@@ -2,7 +2,7 @@
 <aside class="sidebar sidebar-desktop d-none d-md-flex flex-column">
     <div class="logo-area d-flex align-items-center" style="border-bottom: 1px solid var(--card-border); cursor: pointer;" onclick="document.body.classList.toggle('sidebar-collapsed')">
         <img src="{{ asset('img/logo.jpeg') }}" alt="Logo" class="sidebar-logo shadow-sm" style="width: 32px; height: 32px; border-radius: 8px; object-fit: cover;">
-        <h5 class="mb-0 fw-bold text-dark ms-2">Proof of Content</h5>
+        <h5 class="mb-0 fw-bold text-dark ms-2">Omega-QMS</h5>
     </div>
     <div class="flex-grow-1 px-3 py-3 d-flex flex-column">
         <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
@@ -48,8 +48,8 @@
 <div class="offcanvas offcanvas-start sidebar-mobile" tabindex="-1" id="mobileSidebar" style="background-color: var(--card-bg) !important;">
     <div class="offcanvas-header logo-area" style="border-bottom: 1px solid var(--card-border);">
         <div class="d-flex align-items-center">
-            <img src="{{ asset('img/logo.jpeg') }}" alt="Logo" class="sidebar-logo shadow-sm" style="width: 32px; height: 32px; border-radius: 8px; object-fit: cover;">
-            <h5 class="mb-0 fw-bold text-dark ms-2">Proof of Content</h5>
+            <img src="{{ asset('img/logo.jpeg') }}" alt="Logo" class="shadow-sm" style="width: 32px; height: 32px; border-radius: 8px; object-fit: cover;">
+            <h5 class="mb-0 fw-bold text-dark ms-2">Omega-QMS</h5>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>

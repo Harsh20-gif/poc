@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>@yield('title', 'Proof of Content')</title>
+    <title>@yield('title', 'Omega-QMS')</title>
     @include('layouts.partials.head')
 </head>
 <body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Proof of Content - Login</title>
+    <title>Omega-QMS - Login</title>
     @include('layouts.partials.head')
 </head>
 <body class="login-bg">
@@ -9,8 +9,8 @@
         <div class="card login-card">
             <div class="card-body p-4">
                 <div class="text-center mb-4">
-                    <div class="badge bg-primary text-wrap mb-3 fs-5 p-2 rounded-3 shadow-sm">PoC</div>
-                    <h4 class="fw-bold text-dark-custom">Proof of Content</h4>
+                    <div class="badge bg-primary text-wrap mb-3 fs-5 p-2 rounded-3 shadow-sm">Omega-QMS</div>
+                    <h4 class="fw-bold text-dark-custom">Omega-QMS</h4>
                     <p class="text-muted">Sign in to your account</p>
                 </div>
                 
